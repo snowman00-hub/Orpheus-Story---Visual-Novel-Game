@@ -7,18 +7,29 @@ using UnityEngine.UI;
 // 대사창, 화자 이름, 선택지 버튼을 화면에 표시한다.
 public class DialogueView : MonoBehaviour
 {
+    private const string NarrationSpeakerName = "내레이션";
+
     [SerializeField] private TextMeshProUGUI speakerText;
     [SerializeField] private TextMeshProUGUI bodyText;
     [SerializeField] private Transform choiceRoot;
     [SerializeField] private Button choiceButtonPrefab;
+    [SerializeField] private DialogueSpeakerStyleLibrary speakerStyles;
 
     private readonly List<Button> spawnedChoiceButtons = new List<Button>();
 
     // 대사 한 줄의 화자와 본문을 UI에 표시한다.
     public void ShowLine(DialogueLine line)
     {
-        speakerText.SetText(line.Speaker);
-        bodyText.SetText(line.Text);
+        bool isNarration = line.Speaker == NarrationSpeakerName;
+
+        speakerText.gameObject.SetActive(!isNarration);
+        if (!isNarration)
+        {
+            speakerText.SetText(line.Speaker);
+            speakerText.color = speakerStyles.GetColor(line.Speaker);
+        }
+
+        bodyText.SetText(isNarration ? line.Text : $"\"{line.Text}\"");
 
         ClearChoices();
     }

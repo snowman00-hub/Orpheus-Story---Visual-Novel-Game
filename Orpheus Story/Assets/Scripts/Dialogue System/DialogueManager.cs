@@ -110,8 +110,6 @@ public class DialogueManager : MonoBehaviour
         {
             ShowChoice(line.ChoiceKey);
         }
-
-        Debug.Log($"{line.Speaker}: {line.Text}");
     }
 
     // visualEventKey와 연결된 연출 SO를 찾아 화면 연출 컨트롤러에 전달한다.
