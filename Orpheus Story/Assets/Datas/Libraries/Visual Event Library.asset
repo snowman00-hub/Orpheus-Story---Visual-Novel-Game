@@ -1,0 +1,34 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1014eeebc61ad4941a9c5e3217e50af6, type: 3}
+  m_Name: Visual Event Library
+  m_EditorClassIdentifier: Assembly-CSharp::VisualEventLibrary
+  events:
+  - {fileID: 11400000, guid: 7533595974629014aa6879417770d7b8, type: 2}
+  - {fileID: 11400000, guid: 8bb00e39000e8214e999f874e5c893ea, type: 2}
+  - {fileID: 11400000, guid: 11ff7d7e5b9a3fc438d57c0515968c09, type: 2}
+  - {fileID: 11400000, guid: c4fcc8bf7f59faf4b9e5cdb085e6db87, type: 2}
+  - {fileID: 11400000, guid: 3b9823c5ed014c84a9f9afbdb0887202, type: 2}
+  - {fileID: 11400000, guid: 8d04c9ab20611394f9ccfee5827a94e0, type: 2}
+  - {fileID: 11400000, guid: 029571ee95b1a9046909282cbb88f5cc, type: 2}
+  - {fileID: 11400000, guid: 3756e3469bc8a094a920a297043904c4, type: 2}
+  - {fileID: 11400000, guid: 59cfc41897866c341b920b613d51fe88, type: 2}
+  - {fileID: 11400000, guid: d420e1106276f314ea77964d1f55a61b, type: 2}
+  - {fileID: 11400000, guid: 8eb81c20fbc9de440a6f21e88e16bac9, type: 2}
+  - {fileID: 11400000, guid: e958bb58ae8e90b4e8ac941e678efb1c, type: 2}
+  - {fileID: 11400000, guid: e887e7a9bbb12a4469f56204f6c6a720, type: 2}
+  - {fileID: 11400000, guid: 95cad804e5cb2dc4399f97bd1ae20abf, type: 2}
+  - {fileID: 11400000, guid: 38792881c927f0340b37b2d4ad894687, type: 2}
+  - {fileID: 11400000, guid: 8007e892e8606d64cbc783c0a4d0a79b, type: 2}
+  - {fileID: 11400000, guid: 34cf863c4619cd443bd8fd8b503ded6f, type: 2}
+  - {fileID: 11400000, guid: 480afa07e40e2ee4d9306de6f122e071, type: 2}
+  - {fileID: 11400000, guid: 9dd0f30c4d212fd44ae8db91434f7885, type: 2}
