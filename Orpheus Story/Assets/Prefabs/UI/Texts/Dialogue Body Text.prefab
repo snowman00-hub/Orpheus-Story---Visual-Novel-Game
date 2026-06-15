@@ -11,6 +11,7 @@ GameObject:
   - component: {fileID: 4571272700225444963}
   - component: {fileID: 3530003198668983132}
   - component: {fileID: 7207525221591354663}
+  - component: {fileID: 471262878537078630}
   m_Layer: 5
   m_Name: Dialogue Body Text
   m_TagString: Untagged
@@ -141,3 +142,17 @@ MonoBehaviour:
   m_hasFontAssetChanged: 0
   m_baseMaterial: {fileID: 0}
   m_maskOffset: {x: 0, y: 0, z: 0, w: 0}
+--- !u!114 &471262878537078630
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7744195892634547968}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e71d6ff5437fadb49864c4cbb8e6784b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::TypewriterText
+  targetText: {fileID: 7207525221591354663}
+  charactersPerSecond: 25

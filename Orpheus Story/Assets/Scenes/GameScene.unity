@@ -485,17 +485,17 @@ RectTransform:
   m_CorrespondingSourceObject: {fileID: 4571272700225444963, guid: ffccf7c655c80c9418aae47bcf1d0972, type: 3}
   m_PrefabInstance: {fileID: 1845528788378690628}
   m_PrefabAsset: {fileID: 0}
---- !u!114 &920366949 stripped
+--- !u!114 &920366951 stripped
 MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 7207525221591354663, guid: ffccf7c655c80c9418aae47bcf1d0972, type: 3}
+  m_CorrespondingSourceObject: {fileID: 471262878537078630, guid: ffccf7c655c80c9418aae47bcf1d0972, type: 3}
   m_PrefabInstance: {fileID: 1845528788378690628}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: f4688fdb7df04437aeb418b961361dc5, type: 3}
+  m_Script: {fileID: 11500000, guid: e71d6ff5437fadb49864c4cbb8e6784b, type: 3}
   m_Name: 
-  m_EditorClassIdentifier: Unity.TextMeshPro::TMPro.TextMeshProUGUI
+  m_EditorClassIdentifier: Assembly-CSharp::TypewriterText
 --- !u!1 &1057792298
 GameObject:
   m_ObjectHideFlags: 0
@@ -546,7 +546,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::DialogueView
   speakerText: {fileID: 2775327291963321426}
-  bodyText: {fileID: 920366949}
+  bodyTypewriter: {fileID: 920366951}
   choiceRoot: {fileID: 0}
   choiceButtonPrefab: {fileID: 0}
   speakerStyles: {fileID: 11400000, guid: 2c2620228415a5049b2aca0c5879c959, type: 2}
@@ -1044,7 +1044,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6181851749056444076, guid: ffd267f9c28bf784b89607c0c81835ef, type: 3}
       propertyPath: m_AnchorMax.x
-      value: 0.22600001
+      value: 0.71843755
       objectReference: {fileID: 0}
     - target: {fileID: 6181851749056444076, guid: ffd267f9c28bf784b89607c0c81835ef, type: 3}
       propertyPath: m_AnchorMax.y
@@ -1060,11 +1060,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6181851749056444076, guid: ffd267f9c28bf784b89607c0c81835ef, type: 3}
       propertyPath: m_SizeDelta.x
-      value: 0.64453125
+      value: -0.277771
       objectReference: {fileID: 0}
     - target: {fileID: 6181851749056444076, guid: ffd267f9c28bf784b89607c0c81835ef, type: 3}
       propertyPath: m_SizeDelta.y
-      value: -0.5375061
+      value: -0.5375004
       objectReference: {fileID: 0}
     - target: {fileID: 6181851749056444076, guid: ffd267f9c28bf784b89607c0c81835ef, type: 3}
       propertyPath: m_LocalPosition.x
@@ -1096,7 +1096,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6181851749056444076, guid: ffd267f9c28bf784b89607c0c81835ef, type: 3}
       propertyPath: m_AnchoredPosition.x
-      value: 0.3199463
+      value: -0.14111328
       objectReference: {fileID: 0}
     - target: {fileID: 6181851749056444076, guid: ffd267f9c28bf784b89607c0c81835ef, type: 3}
       propertyPath: m_AnchoredPosition.y

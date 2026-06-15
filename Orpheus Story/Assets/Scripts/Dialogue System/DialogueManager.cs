@@ -11,11 +11,11 @@ public class DialogueManager : MonoBehaviour
     [SerializeField] private VisualEventController visualController;
     [SerializeField] private VisualEventLibrary visualEvents;
     [SerializeField] private DialogueChoiceLibrary choices;
-    [SerializeField] private bool advanceWithMouseOrSpace = true; // 마우스 클릭이나 스페이스로 대사를 넘길 수 있게 할지 여부
+    [SerializeField] private bool advanceByConfirmInput = true; // Confirm 입력으로 타이핑 완료 또는 다음 대사 진행 여부를 결정한다.
 
     private Dictionary<string, DialogueLine> linesById;
     private DialogueLine currentLine;
-    private bool waitingForChoice; // 선택지 표시 중에는 마우스/스페이스 입력으로 대사를 넘기지 않도록 하는 플래그
+    private bool waitingForChoice; // 선택지 표시 중인지 여부를 나타낸다.
     private GameInput gameInput;
 
     // 시작 전에 모든 챕터 CSV를 읽어 대사 사전을 준비한다.
@@ -27,7 +27,7 @@ public class DialogueManager : MonoBehaviour
 
     private void OnEnable()
     {
-        gameInput.Enable(); // 입력 시스템 활성화
+        gameInput.Enable();
     }
 
     private void OnDisable()
@@ -46,7 +46,7 @@ public class DialogueManager : MonoBehaviour
         RunDialogueAsync(this.GetCancellationTokenOnDestroy()).Forget();
     }
 
-    // 마우스 클릭이나 스페이스 입력을 UniTask로 기다려 다음 대사로 넘긴다.
+    // Confirm 입력을 기다려 타이핑 완료 또는 다음 대사 진행을 처리한다.
     private async UniTaskVoid RunDialogueAsync(CancellationToken cancellationToken)
     {
         ShowLine(startId);
@@ -54,29 +54,43 @@ public class DialogueManager : MonoBehaviour
         while (!cancellationToken.IsCancellationRequested)
         {
             bool canceled = await UniTask
-                .WaitUntil(ShouldAdvanceByInput, cancellationToken: cancellationToken) // 입력 대기
-                .SuppressCancellationThrow(); // 취소 시 예외 대신 false 반환
-
+                .WaitUntil(ShouldHandleConfirmInput, cancellationToken: cancellationToken) // Confirm 입력이 발생할 때까지 기다린다.
+                .SuppressCancellationThrow(); // 취소가 발생하면 true가 반환
+            
             if (canceled)
             {
                 return;
             }
 
-            Advance(); 
+            // Confirm 입력이 발생했을 때 타이핑 중이면 즉시 완료하고, 그렇지 않으면 다음 대사로 진행한다.
+            if (dialogueView.IsTyping)
+            {
+                dialogueView.CompleteTyping();
+            }
+            else
+            {
+                Advance();
+            }
+
             await UniTask.Yield(PlayerLoopTiming.Update, cancellationToken);
         }
     }
 
-    // 현재 입력으로 대사를 넘길 수 있는지 확인한다.
-    private bool ShouldAdvanceByInput()
-    {
-        if (!advanceWithMouseOrSpace || waitingForChoice || currentLine == null)
+    // 현재 Confirm 입력을 처리할 수 있는지 확인한다.
+    private bool ShouldHandleConfirmInput()
+    {        
+        if (!advanceByConfirmInput || currentLine == null)
         {
             return false;
         }
 
-        // 마우스 클릭이나 스페이스 입력이 이번 프레임에 발생했는지 체크
-        return gameInput.Player.Confirm.WasPerformedThisFrame(); 
+        if (waitingForChoice && !dialogueView.IsTyping)
+        {
+            return false;
+        }
+
+        // Confirm 입력이 이번 프레임에 발생했는지 확인한다.
+        return gameInput.Player.Confirm.WasPerformedThisFrame();
     }
 
     // 현재 대사의 nextId를 따라 다음 대사로 이동한다.
@@ -103,13 +117,16 @@ public class DialogueManager : MonoBehaviour
         }
 
         currentLine = line;
-        dialogueView.ShowLine(line);
         ApplyVisualEvent(line.VisualEventKey);
 
         if (line.HasChoice)
         {
+            dialogueView.ShowChoiceEvent();
             ShowChoice(line.ChoiceKey);
+            return;
         }
+
+        dialogueView.ShowLine(line);
     }
 
     // visualEventKey와 연결된 연출 SO를 찾아 화면 연출 컨트롤러에 전달한다.

@@ -1,5 +1,7 @@
 using System;
 using System.Collections.Generic;
+using System.Threading;
+using Cysharp.Threading.Tasks;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
@@ -10,16 +12,22 @@ public class DialogueView : MonoBehaviour
     private const string NarrationSpeakerName = "내레이션";
 
     [SerializeField] private TextMeshProUGUI speakerText;
-    [SerializeField] private TextMeshProUGUI bodyText;
+    [SerializeField] private TypewriterText bodyTypewriter;
     [SerializeField] private Transform choiceRoot;
     [SerializeField] private Button choiceButtonPrefab;
     [SerializeField] private DialogueSpeakerStyleLibrary speakerStyles;
 
     private readonly List<Button> spawnedChoiceButtons = new List<Button>();
+    private CancellationTokenSource typingCancellation;
+
+    public bool IsTyping => bodyTypewriter.IsTyping;
 
     // 대사 한 줄의 화자와 본문을 UI에 표시한다.
     public void ShowLine(DialogueLine line)
     {
+        StopTyping();
+        ClearChoices();
+
         bool isNarration = line.Speaker == NarrationSpeakerName;
 
         speakerText.gameObject.SetActive(!isNarration);
@@ -29,9 +37,24 @@ public class DialogueView : MonoBehaviour
             speakerText.color = speakerStyles.GetColor(line.Speaker);
         }
 
-        bodyText.SetText(isNarration ? line.Text : $"\"{line.Text}\"");
+        string body = isNarration ? line.Text : $"\"{line.Text}\"";
+        typingCancellation = CancellationTokenSource.CreateLinkedTokenSource(this.GetCancellationTokenOnDestroy());
+        PlayLineAsync(body, typingCancellation).Forget();
+    }
 
+    // 현재 타이핑 중인 문장을 즉시 끝까지 표시한다.
+    public void CompleteTyping()
+    {
+        bodyTypewriter.CompleteImmediately();
+    }
+
+    // 선택지 이벤트를 표시하기 전에 대사 텍스트를 비운다.
+    public void ShowChoiceEvent()
+    {
+        StopTyping();
         ClearChoices();
+        speakerText.gameObject.SetActive(false);
+        bodyTypewriter.SetImmediately(string.Empty);
     }
 
     // 선택지 버튼들을 생성하고 선택 콜백을 연결한다.
@@ -60,5 +83,37 @@ public class DialogueView : MonoBehaviour
         }
 
         spawnedChoiceButtons.Clear();
+    }
+
+    // 본문 타이핑을 재생하고 완료된 토큰을 정리한다.
+    private async UniTaskVoid PlayLineAsync(string body, CancellationTokenSource cancellationSource)
+    {
+        await bodyTypewriter.PlayAsync(body, cancellationSource.Token);
+
+        if (typingCancellation != cancellationSource)
+        {
+            return;
+        }
+
+        typingCancellation.Dispose();
+        typingCancellation = null;
+    }
+
+    // 이전 문장의 타이핑 작업을 중단한다.
+    private void StopTyping()
+    {
+        if (typingCancellation == null)
+        {
+            return;
+        }
+
+        typingCancellation.Cancel();
+        typingCancellation.Dispose();
+        typingCancellation = null;
+    }
+
+    private void OnDestroy()
+    {
+        StopTyping();
     }
 }
