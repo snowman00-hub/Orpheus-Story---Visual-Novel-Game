@@ -11,6 +11,7 @@ GameObject:
   - component: {fileID: 2780508108120318531}
   - component: {fileID: 4310656700637495798}
   - component: {fileID: 4210549196560700891}
+  - component: {fileID: 2076578436820254760}
   m_Layer: 0
   m_Name: Dialogue System
   m_TagString: Untagged
@@ -50,7 +51,7 @@ MonoBehaviour:
   visualController: {fileID: 4210549196560700891}
   visualEvents: {fileID: 11400000, guid: 3042edd267ebdd14fbbb2bea725ac1ff, type: 2}
   choices: {fileID: 11400000, guid: 6b361e590745fb642abcf26e96f5abb5, type: 2}
-  advanceWithMouseOrSpace: 1
+  advanceByConfirmInput: 1
 --- !u!114 &4210549196560700891
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -63,6 +64,22 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5700a699c61be9649a0382d29e4dde55, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::VisualEventController
+  backgroundImage: {fileID: 0}
+  cgImage: {fileID: 0}
+  characterRoot: {fileID: 0}
+  characterViewPrefab: {fileID: 8444590360813540488, guid: 1fcfde394553de24faa04c90790204fc, type: 3}
+--- !u!114 &2076578436820254760
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3295832528026249683}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 24436fd745a7ec04ab831a503635c903, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::VisualEventPreviewController
   backgroundImage: {fileID: 0}
   cgImage: {fileID: 0}
   characterRoot: {fileID: 0}

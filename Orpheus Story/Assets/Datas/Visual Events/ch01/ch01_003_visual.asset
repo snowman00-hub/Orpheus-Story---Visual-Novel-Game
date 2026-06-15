@@ -1,4 +1,4 @@
-﻿%YAML 1.1
+%YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
 --- !u!114 &11400000
 MonoBehaviour:
@@ -10,7 +10,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: d92394c4e0e8c8840973c588f722b8d8, type: 3}
-  m_Name: ch01_003_visual
+  m_Name: ch01_002_visual
   m_EditorClassIdentifier: Assembly-CSharp::VisualEvent
   key: ch01_003_visual
   background: {fileID: 21300000, guid: e5362e2d048105b4bbc404a67277483a, type: 3}
@@ -18,7 +18,7 @@ MonoBehaviour:
   bgm: {fileID: 0}
   sfx: {fileID: 0}
   characters:
-  - Image: {fileID: 21300000, guid: 894304b8a5a0dd848a1368f531f37964, type: 3}
-    AnchoredPosition: {x: 0, y: 0}
-    Scale: 1
+  - Image: {fileID: 21300000, guid: 696f01ed5e26778408542225fce9aa04, type: 3}
+    AnchoredPosition: {x: 19, y: -210}
+    Scale: 1.45
     Visible: 1

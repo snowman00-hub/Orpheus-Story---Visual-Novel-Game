@@ -6,6 +6,11 @@ public class CharacterSlotView : MonoBehaviour
 {
     [SerializeField] private Image image;
 
+    public Sprite Sprite => image.sprite;
+    public Vector2 AnchoredPosition => image.rectTransform.anchoredPosition;
+    public float Scale => image.rectTransform.localScale.x;
+    public bool Visible => image.enabled;
+
     // 슬롯에 표시할 이미지, 위치, 크기를 적용한다.
     public void Apply(Sprite sprite, Vector2 anchoredPosition, float scale, bool visible)
     {

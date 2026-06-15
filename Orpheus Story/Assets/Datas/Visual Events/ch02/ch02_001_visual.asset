@@ -10,15 +10,11 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: d92394c4e0e8c8840973c588f722b8d8, type: 3}
-  m_Name: ch01_010_visual
+  m_Name: ch02_001_visual
   m_EditorClassIdentifier: Assembly-CSharp::VisualEvent
-  key: ch01_010_visual
-  background: {fileID: 21300000, guid: e5362e2d048105b4bbc404a67277483a, type: 3}
+  key: ch02_001_visual
+  background: {fileID: 0}
   cg: {fileID: 0}
   bgm: {fileID: 0}
   sfx: {fileID: 0}
-  characters:
-  - Image: {fileID: 21300000, guid: 696f01ed5e26778408542225fce9aa04, type: 3}
-    AnchoredPosition: {x: 23, y: -205}
-    Scale: 1.45
-    Visible: 1
+  characters: []

@@ -27,19 +27,19 @@ public class DialogueView : MonoBehaviour
     {
         StopTyping();
         ClearChoices();
+        ApplySpeaker(line);
 
-        bool isNarration = line.Speaker == NarrationSpeakerName;
-
-        speakerText.gameObject.SetActive(!isNarration);
-        if (!isNarration)
-        {
-            speakerText.SetText(line.Speaker);
-            speakerText.color = speakerStyles.GetColor(line.Speaker);
-        }
-
-        string body = isNarration ? line.Text : $"\"{line.Text}\"";
         typingCancellation = CancellationTokenSource.CreateLinkedTokenSource(this.GetCancellationTokenOnDestroy());
-        PlayLineAsync(body, typingCancellation).Forget();
+        PlayLineAsync(BuildBodyText(line), typingCancellation).Forget();
+    }
+
+    // 대사 한 줄의 화자와 본문을 타이핑 없이 즉시 표시한다.
+    public void ShowLineImmediately(DialogueLine line)
+    {
+        StopTyping();
+        ClearChoices();
+        ApplySpeaker(line);
+        bodyTypewriter.SetImmediately(BuildBodyText(line));
     }
 
     // 현재 타이핑 중인 문장을 즉시 끝까지 표시한다.
@@ -83,6 +83,25 @@ public class DialogueView : MonoBehaviour
         }
 
         spawnedChoiceButtons.Clear();
+    }
+
+    // 화자 텍스트 표시 여부와 색상을 적용한다.
+    private void ApplySpeaker(DialogueLine line)
+    {
+        bool isNarration = line.Speaker == NarrationSpeakerName;
+
+        speakerText.gameObject.SetActive(!isNarration);
+        if (!isNarration)
+        {
+            speakerText.SetText(line.Speaker);
+            speakerText.color = speakerStyles.GetColor(line.Speaker);
+        }
+    }
+
+    // 내레이션과 일반 대사의 본문 표시 형식을 만든다.
+    private static string BuildBodyText(DialogueLine line)
+    {
+        return line.Speaker == NarrationSpeakerName ? line.Text : $"\"{line.Text}\"";
     }
 
     // 본문 타이핑을 재생하고 완료된 토큰을 정리한다.

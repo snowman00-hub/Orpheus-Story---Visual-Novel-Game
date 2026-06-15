@@ -2,7 +2,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
-// VisualEvent를 받아 배경, 캐릭터, CG, 오디오를 뷰에 적용한다.
+// 게임 실행 중 VisualEvent를 실제 화면과 오디오에 적용한다.
 public class VisualEventController : MonoBehaviour
 {
     [SerializeField] private Image backgroundImage;
@@ -12,7 +12,7 @@ public class VisualEventController : MonoBehaviour
 
     private readonly List<CharacterSlotView> characterViews = new List<CharacterSlotView>();
 
-    // 전달받은 VisualEvent의 모든 연출 요소를 화면에 반영한다.
+    // 전달받은 VisualEvent의 모든 연출 요소를 게임 화면에 반영한다.
     public void Apply(VisualEvent visualEvent)
     {
         ApplyImage(backgroundImage, visualEvent.Background, visualEvent.Background != null);
@@ -31,14 +31,18 @@ public class VisualEventController : MonoBehaviour
     // VisualEvent에 설정된 BGM과 효과음을 재생한다.
     private static void ApplyAudio(VisualEvent visualEvent)
     {
+        if (SoundManager.Instance == null)
+        {
+            return;
+        }
+
         SoundManager.Instance.PlayBgm(visualEvent.Bgm);
         SoundManager.Instance.PlaySfx(visualEvent.Sfx);
     }
 
-    // VisualEvent에 설정된 캐릭터 이미지를 이미지별 위치와 크기로 적용한다.
+    // VisualEvent에 설정된 캐릭터 배치를 화면 슬롯에 적용한다.
     private void ApplyCharacters(VisualEvent visualEvent)
     {
-        // 오브젝트 풀링 적용
         EnsureCharacterViewCount(visualEvent.Characters.Count);
 
         for (int i = 0; i < characterViews.Count; i++)
@@ -55,7 +59,7 @@ public class VisualEventController : MonoBehaviour
         }
     }
 
-    // 필요한 캐릭터 이미지 뷰 개수만큼 프리팹을 생성한다.
+    // 필요한 캐릭터 슬롯 개수만큼 프리팹을 생성한다.
     private void EnsureCharacterViewCount(int count)
     {
         while (characterViews.Count < count)
