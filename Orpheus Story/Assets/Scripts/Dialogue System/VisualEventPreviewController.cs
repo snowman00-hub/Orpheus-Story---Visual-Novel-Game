@@ -54,7 +54,7 @@ public class VisualEventPreviewController : MonoBehaviour
     public void AddPreviewCharacter(Sprite sprite)
     {
         CharacterSlotView view = CreateCharacterView();
-        view.Apply(sprite, Vector2.zero, 1f, true);
+        view.ApplyInstant(sprite, Vector2.zero, 1f, true);
     }
 
     // 미리보기 화면의 모든 캐릭터 슬롯 오브젝트를 제거한다.
@@ -104,7 +104,7 @@ public class VisualEventPreviewController : MonoBehaviour
         foreach (VisualCharacterPlacement placement in visualEvent.Characters)
         {
             CharacterSlotView view = CreateCharacterView();
-            view.Apply(placement.Image, placement.AnchoredPosition, placement.Scale, placement.Visible);
+            view.ApplyInstant(placement.Image, placement.AnchoredPosition, placement.Scale, placement.Visible);
         }
     }
 

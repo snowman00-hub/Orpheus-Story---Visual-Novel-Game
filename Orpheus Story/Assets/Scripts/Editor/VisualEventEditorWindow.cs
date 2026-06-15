@@ -11,6 +11,10 @@ public class VisualEventEditorWindow : EditorWindow
     private const string ShowReferencesKey = "OrpheusStory.VisualEventEditor.ShowReferences";
     private const string ShowDialogueInfoKey = "OrpheusStory.VisualEventEditor.ShowDialogueInfo";
     private const string ShowVisualEventInfoKey = "OrpheusStory.VisualEventEditor.ShowVisualEventInfo";
+    private const string ChapterIndexKey = "OrpheusStory.VisualEventEditor.ChapterIndex";
+    private const string LineIndexKey = "OrpheusStory.VisualEventEditor.LineIndex";
+    private const string PaletteTabIndexKey = "OrpheusStory.VisualEventEditor.PaletteTabIndex";
+    private const string ScrollPositionYKey = "OrpheusStory.VisualEventEditor.ScrollPositionY";
     private const float PaletteCellWidth = 132f;
     private const float PaletteImageSize = 112f;
     private const float PaletteRowHeight = 148f;
@@ -43,6 +47,7 @@ public class VisualEventEditorWindow : EditorWindow
 
     private void OnEnable()
     {
+        RestoreEditorPosition();
         RestoreFoldoutStates();
         RestoreAssetReferences();
         FindSceneReferences();
@@ -58,6 +63,13 @@ public class VisualEventEditorWindow : EditorWindow
         DrawVisualEventControls();
         EditorGUILayout.Space(8f);
         DrawPalette();
+        SaveScrollPosition();
+    }
+
+    private void OnDisable()
+    {
+        SaveEditorPosition();
+        SaveScrollPosition();
     }
 
     // 평소에는 접어둘 수 있는 보조 정보를 표시한다.
@@ -116,12 +128,12 @@ public class VisualEventEditorWindow : EditorWindow
     {
         currentVisualEvent = null;
 
-        if (visualEventLibrary == null || CurrentLine == null)
+        if (CurrentLine == null)
         {
             return;
         }
 
-        visualEventLibrary.TryGet(CurrentLine.VisualEventKey, out currentVisualEvent);
+        visualEventLibrary?.TryGet(CurrentLine.VisualEventKey, out currentVisualEvent);
     }
 
     // 에디터 창에서 사용할 참조를 표시한다.
@@ -162,6 +174,7 @@ public class VisualEventEditorWindow : EditorWindow
             LoadChapterLines();
             LoadCurrentVisualEvent();
             RefreshCurrentPreview();
+            SaveEditorPosition();
         }
 
         using (new EditorGUILayout.HorizontalScope())
@@ -259,6 +272,8 @@ public class VisualEventEditorWindow : EditorWindow
         {
             scrollPosition = Vector2.zero;
             GUI.FocusControl(null);
+            SaveEditorPosition();
+            SaveScrollPosition();
         }
 
         scrollPosition = EditorGUILayout.BeginScrollView(scrollPosition);
@@ -412,6 +427,7 @@ public class VisualEventEditorWindow : EditorWindow
         lineIndex = Mathf.Clamp(lineIndex + delta, 0, Mathf.Max(0, currentChapterLines.Count - 1));
         LoadCurrentVisualEvent();
         RefreshCurrentPreview();
+        SaveEditorPosition();
     }
 
     // 현재 대사와 VisualEvent 미리보기를 함께 갱신한다.
@@ -588,6 +604,7 @@ public class VisualEventEditorWindow : EditorWindow
         return visualEvent;
     }
 
+    // 라이브러리 캐시가 놓친 경우 현재 키와 챕터 경로로 VisualEvent 에셋을 직접 찾는다.
     // 새 VisualEvent 에셋을 라이브러리 목록에 추가한다.
     private void AddVisualEventToLibrary(VisualEvent visualEvent)
     {
@@ -669,6 +686,29 @@ public class VisualEventEditorWindow : EditorWindow
     }
 
     // 현재 에셋 참조 경로를 에디터 설정에 저장한다.
+    // 마지막으로 보던 챕터, 대사, 팔레트 위치를 복원한다.
+    private void RestoreEditorPosition()
+    {
+        chapterIndex = Mathf.Clamp(EditorPrefs.GetInt(ChapterIndexKey, 0), 0, chapters.Length - 1);
+        lineIndex = Mathf.Max(0, EditorPrefs.GetInt(LineIndexKey, 0));
+        paletteTabIndex = Mathf.Clamp(EditorPrefs.GetInt(PaletteTabIndexKey, 0), 0, paletteTabs.Length - 1);
+        scrollPosition.y = Mathf.Max(0f, EditorPrefs.GetFloat(ScrollPositionYKey, 0f));
+    }
+
+    // 현재 보고 있는 챕터, 대사, 팔레트 탭을 저장한다.
+    private void SaveEditorPosition()
+    {
+        EditorPrefs.SetInt(ChapterIndexKey, chapterIndex);
+        EditorPrefs.SetInt(LineIndexKey, lineIndex);
+        EditorPrefs.SetInt(PaletteTabIndexKey, paletteTabIndex);
+    }
+
+    // 팔레트 스크롤 위치를 저장한다.
+    private void SaveScrollPosition()
+    {
+        EditorPrefs.SetFloat(ScrollPositionYKey, scrollPosition.y);
+    }
+
     private void SaveAssetReferences()
     {
         SaveAssetReference(VisualEventLibraryKey, visualEventLibrary);

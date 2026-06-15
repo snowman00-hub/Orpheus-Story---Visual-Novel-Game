@@ -68,6 +68,7 @@ MonoBehaviour:
   cgImage: {fileID: 0}
   characterRoot: {fileID: 0}
   characterViewPrefab: {fileID: 8444590360813540488, guid: 1fcfde394553de24faa04c90790204fc, type: 3}
+  characterFadeInDuration: 0.35
 --- !u!114 &2076578436820254760
 MonoBehaviour:
   m_ObjectHideFlags: 0

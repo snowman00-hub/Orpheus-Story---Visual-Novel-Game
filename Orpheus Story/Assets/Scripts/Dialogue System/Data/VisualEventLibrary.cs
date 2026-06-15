@@ -7,26 +7,27 @@ public class VisualEventLibrary : ScriptableObject
 {
     [SerializeField] private List<VisualEvent> events = new List<VisualEvent>();
 
-    private Dictionary<string, VisualEvent> eventsByKey;
+    private readonly Dictionary<string, VisualEvent> eventsByKey = new Dictionary<string, VisualEvent>();
 
     // key에 해당하는 VisualEvent를 찾는다.
     public bool TryGet(string key, out VisualEvent visualEvent)
     {
-        EnsureCache();
+        RebuildCache();
         return eventsByKey.TryGetValue(key, out visualEvent);
     }
 
-    // Inspector에 등록된 VisualEvent 목록을 검색용 사전으로 캐싱한다.
-    private void EnsureCache()
+    // Inspector에 등록된 VisualEvent 목록을 검색용 사전으로 다시 만든다.
+    private void RebuildCache()
     {
-        if (eventsByKey != null)
-        {
-            return;
-        }
+        eventsByKey.Clear();
 
-        eventsByKey = new Dictionary<string, VisualEvent>();
         foreach (VisualEvent visualEvent in events)
         {
+            if (visualEvent == null || string.IsNullOrEmpty(visualEvent.Key))
+            {
+                continue;
+            }
+
             eventsByKey[visualEvent.Key] = visualEvent;
         }
     }

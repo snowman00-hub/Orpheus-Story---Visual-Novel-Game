@@ -9,8 +9,16 @@ public class VisualEventController : MonoBehaviour
     [SerializeField] private Image cgImage;
     [SerializeField] private Transform characterRoot;
     [SerializeField] private CharacterSlotView characterViewPrefab;
+    [SerializeField] private float characterFadeInDuration = 0.35f;
 
     private readonly List<CharacterSlotView> characterViews = new List<CharacterSlotView>();
+
+    private void Awake()
+    {
+        ClearExistingCharacterViews();
+        ApplyImage(backgroundImage, null, false);
+        ApplyImage(cgImage, null, false);
+    }
 
     // 전달받은 VisualEvent의 모든 연출 요소를 게임 화면에 반영한다.
     public void Apply(VisualEvent visualEvent)
@@ -50,7 +58,7 @@ public class VisualEventController : MonoBehaviour
             if (i < visualEvent.Characters.Count)
             {
                 VisualCharacterPlacement placement = visualEvent.Characters[i];
-                characterViews[i].Apply(placement.Image, placement.AnchoredPosition, placement.Scale, placement.Visible);
+                characterViews[i].ApplyRuntime(placement.Image, placement.AnchoredPosition, placement.Scale, placement.Visible, characterFadeInDuration);
             }
             else
             {
@@ -65,7 +73,19 @@ public class VisualEventController : MonoBehaviour
         while (characterViews.Count < count)
         {
             CharacterSlotView view = Instantiate(characterViewPrefab, characterRoot);
+            view.Hide();
             characterViews.Add(view);
         }
+    }
+
+    // 에디터 미리보기 후 characterRoot에 남은 캐릭터 슬롯을 플레이 시작 전에 제거한다.
+    private void ClearExistingCharacterViews()
+    {
+        for (int i = characterRoot.childCount - 1; i >= 0; i--)
+        {
+            Destroy(characterRoot.GetChild(i).gameObject);
+        }
+
+        characterViews.Clear();
     }
 }

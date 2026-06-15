@@ -18,7 +18,7 @@ MonoBehaviour:
   bgm: {fileID: 0}
   sfx: {fileID: 0}
   characters:
-  - Image: {fileID: 21300000, guid: 696f01ed5e26778408542225fce9aa04, type: 3}
+  - Image: {fileID: 21300000, guid: ee3f660362a9ecd46af33f5204dc05b6, type: 3}
     AnchoredPosition: {x: 23, y: -205}
     Scale: 1.45
     Visible: 1
