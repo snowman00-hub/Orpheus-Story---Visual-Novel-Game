@@ -10,6 +10,7 @@ public class VisualEvent : ScriptableObject
     [SerializeField] private Sprite cg;
     [SerializeField] private AudioClip bgm;
     [SerializeField] private AudioClip sfx;
+    [SerializeField] private List<VisualEffect> effects = new List<VisualEffect>();
     [SerializeField] private List<VisualCharacterPlacement> characters = new List<VisualCharacterPlacement>();
 
     public string Key => key;
@@ -17,5 +18,6 @@ public class VisualEvent : ScriptableObject
     public Sprite Cg => cg;
     public AudioClip Bgm => bgm;
     public AudioClip Sfx => sfx;
+    public IReadOnlyList<VisualEffect> Effects => effects;
     public IReadOnlyList<VisualCharacterPlacement> Characters => characters;
 }

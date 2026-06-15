@@ -1,5 +1,7 @@
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading;
+using Cysharp.Threading.Tasks;
 using UnityEditor;
 using UnityEngine;
 
@@ -21,7 +23,7 @@ public class VisualEventEditorWindow : EditorWindow
     private const int PaletteExtraRows = 2;
 
     private readonly string[] chapters = { "ch01", "ch02", "ch03", "ch04", "ch05", "ch06", "ch07" };
-    private readonly string[] paletteTabs = { "Backgrounds", "Characters", "CGs" };
+    private readonly string[] paletteTabs = { "Backgrounds", "Characters", "CGs", "Effects" };
 
     private int chapterIndex;
     private int lineIndex;
@@ -36,6 +38,7 @@ public class VisualEventEditorWindow : EditorWindow
     private VisualEventEditorPalette palette;
     private List<DialogueLine> currentChapterLines = new List<DialogueLine>();
     private VisualEvent currentVisualEvent;
+    private CancellationTokenSource previewEffectCancellation;
 
     [MenuItem("Tools/Orpheus Story/Visual Event Editor")]
     public static void Open()
@@ -68,6 +71,7 @@ public class VisualEventEditorWindow : EditorWindow
 
     private void OnDisable()
     {
+        CancelPreviewEffect();
         SaveEditorPosition();
         SaveScrollPosition();
     }
@@ -277,7 +281,14 @@ public class VisualEventEditorWindow : EditorWindow
         }
 
         scrollPosition = EditorGUILayout.BeginScrollView(scrollPosition);
-        DrawSpriteGrid(GetCurrentPaletteSprites(), GetCurrentPaletteAction());
+        if (paletteTabIndex == 3)
+        {
+            DrawEffectPalette();
+        }
+        else
+        {
+            DrawSpriteGrid(GetCurrentPaletteSprites(), GetCurrentPaletteAction());
+        }
         EditorGUILayout.EndScrollView();
     }
 
@@ -314,6 +325,199 @@ public class VisualEventEditorWindow : EditorWindow
     }
 
     // 스프라이트 목록을 보이는 범위만 썸네일 격자로 그린다.
+    private void DrawEffectPalette()
+    {
+        if (currentVisualEvent == null)
+        {
+            EditorGUILayout.HelpBox("Create/Load current VisualEvent first.", MessageType.Info);
+            return;
+        }
+
+        EditorGUILayout.LabelField("Current Effects", EditorStyles.boldLabel);
+        DrawCurrentEffects(currentVisualEvent);
+
+        EditorGUILayout.Space(8f);
+        EditorGUILayout.LabelField("Effect Palette", EditorStyles.boldLabel);
+        DrawEffectCandidates();
+    }
+
+    private void DrawCurrentEffects(VisualEvent visualEvent)
+    {
+        SerializedObject serializedObject = new SerializedObject(visualEvent);
+        SerializedProperty effectsProperty = serializedObject.FindProperty("effects");
+
+        if (effectsProperty.arraySize == 0)
+        {
+            EditorGUILayout.HelpBox("No effects in this VisualEvent.", MessageType.Info);
+        }
+
+        for (int i = 0; i < effectsProperty.arraySize; i++)
+        {
+            using (new EditorGUILayout.HorizontalScope())
+            {
+                SerializedProperty element = effectsProperty.GetArrayElementAtIndex(i);
+                EditorGUILayout.PropertyField(element, GUIContent.none);
+
+                if (GUILayout.Button("Play", GUILayout.Width(60f)))
+                {
+                    PlayEffectPreview(element.objectReferenceValue as VisualEffect);
+                    GUI.FocusControl(null);
+                }
+
+                if (GUILayout.Button("Remove", GUILayout.Width(80f)))
+                {
+                    DeleteArrayElement(effectsProperty, i);
+                    serializedObject.ApplyModifiedProperties();
+                    EditorUtility.SetDirty(visualEvent);
+                    AssetDatabase.SaveAssets();
+                    currentVisualEvent = visualEvent;
+                    GUI.FocusControl(null);
+                    return;
+                }
+            }
+        }
+
+        serializedObject.ApplyModifiedProperties();
+    }
+
+    private void DrawEffectCandidates()
+    {
+        IReadOnlyList<VisualEffect> effects = palette.Effects;
+        if (effects.Count == 0)
+        {
+            EditorGUILayout.HelpBox("No effects registered in the palette.", MessageType.Info);
+            return;
+        }
+
+        foreach (VisualEffect effect in effects)
+        {
+            using (new EditorGUILayout.HorizontalScope())
+            {
+                EditorGUI.BeginDisabledGroup(effect == null);
+                EditorGUILayout.ObjectField(effect, typeof(VisualEffect), false);
+
+                if (GUILayout.Button("Play", GUILayout.Width(60f)))
+                {
+                    PlayEffectPreview(effect);
+                    GUI.FocusControl(null);
+                }
+
+                if (GUILayout.Button("Add", GUILayout.Width(80f)))
+                {
+                    AddEffectToCurrentEvent(effect);
+                    GUI.FocusControl(null);
+                }
+
+                EditorGUI.EndDisabledGroup();
+            }
+        }
+    }
+
+    private void AddEffectToCurrentEvent(VisualEffect effect)
+    {
+        VisualEvent visualEvent = GetOrCreateCurrentVisualEvent();
+        if (visualEvent == null || effect == null)
+        {
+            return;
+        }
+
+        SerializedObject serializedObject = new SerializedObject(visualEvent);
+        SerializedProperty effectsProperty = serializedObject.FindProperty("effects");
+        int index = effectsProperty.arraySize;
+        effectsProperty.InsertArrayElementAtIndex(index);
+        effectsProperty.GetArrayElementAtIndex(index).objectReferenceValue = effect;
+        serializedObject.ApplyModifiedProperties();
+
+        EditorUtility.SetDirty(visualEvent);
+        AssetDatabase.SaveAssets();
+        currentVisualEvent = visualEvent;
+    }
+
+    private static void DeleteArrayElement(SerializedProperty arrayProperty, int index)
+    {
+        int oldSize = arrayProperty.arraySize;
+        arrayProperty.DeleteArrayElementAtIndex(index);
+
+        if (arrayProperty.arraySize == oldSize)
+        {
+            arrayProperty.DeleteArrayElementAtIndex(index);
+        }
+    }
+
+    private void PlayEffectPreview(VisualEffect effect)
+    {
+        if (effect == null)
+        {
+            return;
+        }
+
+        Canvas rootCanvas = GetEffectPreviewCanvas();
+        if (rootCanvas == null)
+        {
+            EditorUtility.DisplayDialog("Visual Effect Preview", "No Canvas found for effect preview.", "OK");
+            return;
+        }
+
+        CancelPreviewEffect();
+        previewEffectCancellation = new CancellationTokenSource();
+        PlayEffectPreviewAsync(effect, rootCanvas, previewEffectCancellation).Forget();
+    }
+
+    private async UniTaskVoid PlayEffectPreviewAsync(VisualEffect effect, Canvas rootCanvas, CancellationTokenSource cancellationSource)
+    {
+        try
+        {
+            var context = new VisualEffectContext(rootCanvas);
+            await effect.Play(context, cancellationSource.Token);
+        }
+        catch (System.OperationCanceledException)
+        {
+        }
+        finally
+        {
+            if (previewEffectCancellation == cancellationSource)
+            {
+                previewEffectCancellation = null;
+            }
+
+            cancellationSource.Dispose();
+        }
+    }
+
+    private void CancelPreviewEffect()
+    {
+        if (previewEffectCancellation == null)
+        {
+            return;
+        }
+
+        previewEffectCancellation.Cancel();
+        previewEffectCancellation = null;
+    }
+
+    private Canvas GetEffectPreviewCanvas()
+    {
+        if (previewController != null)
+        {
+            Canvas canvas = previewController.GetComponentInParent<Canvas>();
+            if (canvas != null)
+            {
+                return canvas;
+            }
+        }
+
+        if (dialogueView != null)
+        {
+            Canvas canvas = dialogueView.GetComponentInParent<Canvas>();
+            if (canvas != null)
+            {
+                return canvas;
+            }
+        }
+
+        return FindSceneObject<Canvas>();
+    }
+
     private void DrawSpriteGrid(IReadOnlyList<Sprite> sprites, System.Action<Sprite> onSelected)
     {
         int columns = Mathf.Max(1, Mathf.FloorToInt((position.width - 24f) / PaletteCellWidth));

@@ -8,8 +8,10 @@ public class VisualEventEditorPalette : ScriptableObject
     [SerializeField] private List<Sprite> backgrounds = new List<Sprite>();
     [SerializeField] private List<Sprite> characters = new List<Sprite>();
     [SerializeField] private List<Sprite> cgs = new List<Sprite>();
+    [SerializeField] private List<VisualEffect> effects = new List<VisualEffect>();
 
     public IReadOnlyList<Sprite> Backgrounds => backgrounds;
     public IReadOnlyList<Sprite> Characters => characters;
     public IReadOnlyList<Sprite> Cgs => cgs;
+    public IReadOnlyList<VisualEffect> Effects => effects;
 }

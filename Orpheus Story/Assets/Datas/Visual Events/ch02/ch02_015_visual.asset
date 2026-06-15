@@ -14,7 +14,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::VisualEvent
   key: ch02_015_visual
   background: {fileID: 21300000, guid: 126b8bb57a1baec4589ffb06d341bc7c, type: 3}
-  cg: {fileID: 0}
+  cg: {fileID: -7144290929766801545, guid: 971c3d16b7c59084da52886a564e8710, type: 3}
   bgm: {fileID: 0}
   sfx: {fileID: 0}
+  effects: []
   characters: []
