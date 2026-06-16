@@ -13,8 +13,9 @@ MonoBehaviour:
   m_Name: ch07_018_visual
   m_EditorClassIdentifier: Assembly-CSharp::VisualEvent
   key: ch07_018_visual
-  background: {fileID: 0}
+  background: {fileID: 21300000, guid: bd581136d0b5a2c449542c64fdebf109, type: 3}
   cg: {fileID: 0}
   bgm: {fileID: 0}
   sfx: {fileID: 0}
+  effects: []
   characters: []

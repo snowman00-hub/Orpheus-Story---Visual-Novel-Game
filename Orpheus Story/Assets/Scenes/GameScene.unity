@@ -678,14 +678,14 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: UnityEngine.UI::UnityEngine.UI.Image
   m_Material: {fileID: 0}
-  m_Color: {r: 1, g: 1, b: 1, a: 0.6745098}
+  m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_RaycastTarget: 1
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 21300000, guid: 126b8bb57a1baec4589ffb06d341bc7c, type: 3}
+  m_Sprite: {fileID: 21300000, guid: e5362e2d048105b4bbc404a67277483a, type: 3}
   m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1
@@ -747,7 +747,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1797555554}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: fe87c0e1cc204ed48ad3b37840f39efc, type: 3}
   m_Name: 
@@ -760,7 +760,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: -7144290929766801545, guid: 971c3d16b7c59084da52886a564e8710, type: 3}
+  m_Sprite: {fileID: 0}
   m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1
@@ -947,8 +947,12 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7207525221591354663, guid: ffccf7c655c80c9418aae47bcf1d0972, type: 3}
       propertyPath: m_text
-      value: "\"\uC5D0\uC6B0\uB9AC\uB514\uCF00... \uAD1C\uCC2E\uC544? \uBB34\uC2A8
-        \uC77C\uC774\uC57C? \uC65C \uC5EC\uAE30 \uC788\uC5B4?\""
+      value: "\uC544\uCE68 \uD587\uC0B4\uC774 \uC232 \uC0AC\uC774\uB85C \uC3DF\uC544\uC838
+        \uB0B4\uB9AC\uB294 \uACF3. \uC624\uB974\uD398\uC6B0\uC2A4\uB294 \uB098\uBB34\uC5D0
+        \uAE30\uB304 \uCC44 \uB9AC\uB77C\uB97C \uC870\uC6A9\uD788 \uB72F\uACE0 \uC788\uACE0,
+        \uADF8 \uC606\uC5D0\uC11C \uC5D0\uC6B0\uB9AC\uB514\uCF00\uB294 \uBB34\uB98E\uC5D0
+        \uC549\uC740 \uB098\uBB47\uC78E\uC744 \uB9CC\uC9C0\uC791\uAC70\uB9AC\uACE0
+        \uC788\uB2E4."
       objectReference: {fileID: 0}
     - target: {fileID: 7744195892634547968, guid: ffccf7c655c80c9418aae47bcf1d0972, type: 3}
       propertyPath: m_Name
@@ -971,34 +975,6 @@ PrefabInstance:
       propertyPath: rootCanvas
       value: 
       objectReference: {fileID: 209554045}
-    - target: {fileID: 410423168956237158, guid: 1a30ada14197fb24ea04a3fb99ef7db3, type: 3}
-      propertyPath: waveStrength
-      value: 0.007
-      objectReference: {fileID: 0}
-    - target: {fileID: 410423168956237158, guid: 1a30ada14197fb24ea04a3fb99ef7db3, type: 3}
-      propertyPath: waveFrequency
-      value: 30
-      objectReference: {fileID: 0}
-    - target: {fileID: 410423168956237158, guid: 1a30ada14197fb24ea04a3fb99ef7db3, type: 3}
-      propertyPath: revealDuration
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 410423168956237158, guid: 1a30ada14197fb24ea04a3fb99ef7db3, type: 3}
-      propertyPath: coverFadeInDuration
-      value: 0.3
-      objectReference: {fileID: 0}
-    - target: {fileID: 410423168956237158, guid: 1a30ada14197fb24ea04a3fb99ef7db3, type: 3}
-      propertyPath: curtainSegmentCount
-      value: 96
-      objectReference: {fileID: 0}
-    - target: {fileID: 410423168956237158, guid: 1a30ada14197fb24ea04a3fb99ef7db3, type: 3}
-      propertyPath: dialogueFadeInDuration
-      value: 0.5
-      objectReference: {fileID: 0}
-    - target: {fileID: 410423168956237158, guid: 1a30ada14197fb24ea04a3fb99ef7db3, type: 3}
-      propertyPath: dialogueFadeOutDuration
-      value: 0.5
-      objectReference: {fileID: 0}
     - target: {fileID: 2076578436820254760, guid: 1a30ada14197fb24ea04a3fb99ef7db3, type: 3}
       propertyPath: cgImage
       value: 
@@ -1106,7 +1082,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3685811848463136007, guid: ffd267f9c28bf784b89607c0c81835ef, type: 3}
       propertyPath: m_fontColor32.rgba
-      value: 4294949004
+      value: 4291276287
       objectReference: {fileID: 0}
     - target: {fileID: 6181851749056444076, guid: ffd267f9c28bf784b89607c0c81835ef, type: 3}
       propertyPath: m_Pivot.x
@@ -1194,7 +1170,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7677453789472429512, guid: ffd267f9c28bf784b89607c0c81835ef, type: 3}
       propertyPath: m_IsActive
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []

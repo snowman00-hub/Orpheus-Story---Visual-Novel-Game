@@ -47,7 +47,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 554836cba89e2114b99d894f4aaa3e7e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::DialogueManager
-  startId: ch01_019
+  startId: ch01_001
   dialogueView: {fileID: 0}
   visualController: {fileID: 4210549196560700891}
   visualEvents: {fileID: 11400000, guid: 3042edd267ebdd14fbbb2bea725ac1ff, type: 2}
@@ -72,6 +72,7 @@ MonoBehaviour:
   characterRoot: {fileID: 0}
   characterViewPrefab: {fileID: 8444590360813540488, guid: 1fcfde394553de24faa04c90790204fc, type: 3}
   characterFadeInDuration: 0.35
+  characterFadeOutDuration: 0.35
 --- !u!114 &2076578436820254760
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -102,10 +103,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::VisualTransition
   rootCanvas: {fileID: 0}
   coverColor: {r: 0, g: 0, b: 0, a: 1}
-  dialogueFadeOutDuration: 0.2
-  coverFadeInDuration: 0.25
-  revealDuration: 0.8
-  dialogueFadeInDuration: 0.2
-  curtainColumnCount: 64
-  waveStrength: 0.08
-  waveFrequency: 18
+  dialogueFadeOutDuration: 0.5
+  coverFadeInDuration: 0.3
+  revealDuration: 1
+  dialogueFadeInDuration: 0.5
+  curtainSegmentCount: 96
+  waveStrength: 0.007
+  waveFrequency: 30

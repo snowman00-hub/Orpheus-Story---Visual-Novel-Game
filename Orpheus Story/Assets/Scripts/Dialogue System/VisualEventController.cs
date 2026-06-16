@@ -15,6 +15,7 @@ public class VisualEventController : MonoBehaviour
     [SerializeField] private Transform characterRoot;
     [SerializeField] private CharacterSlotView characterViewPrefab;
     [SerializeField] private float characterFadeInDuration = 0.35f;
+    [SerializeField] private float characterFadeOutDuration = 0.25f;
 
     private readonly List<CharacterSlotView> characterViews = new List<CharacterSlotView>();
     private VisualEffectContext effectContext;
@@ -43,7 +44,6 @@ public class VisualEventController : MonoBehaviour
         ApplyAudio(visualEvent);
         ApplyCharacters(visualEvent);
         PlayEffects(visualEvent);
-        // 첫 번째 VisualEvent에서는 화면 전환 연출을 건너띄었으니, 다음부터는 가능하게 변경
         hasAppliedVisualEvent = true;
     }
 
@@ -125,7 +125,7 @@ public class VisualEventController : MonoBehaviour
             }
             else
             {
-                characterViews[i].Hide();
+                characterViews[i].HideRuntime(characterFadeOutDuration);
             }
         }
     }

@@ -69,6 +69,21 @@ public class CharacterSlotView : MonoBehaviour
         image.enabled = false;
     }
 
+    // 실행 중 캐릭터가 사라질 때 알파를 낮춘 뒤 숨긴다.
+    public void HideRuntime(float fadeDuration)
+    {
+        CancelFade();
+
+        if (!image.enabled || image.sprite == null || fadeDuration <= 0f)
+        {
+            Hide();
+            return;
+        }
+
+        fadeCancellation = new CancellationTokenSource();
+        FadeOutAsync(fadeDuration, fadeCancellation.Token).Forget();
+    }
+
     private void OnDestroy()
     {
         CancelFade();
@@ -126,6 +141,30 @@ public class CharacterSlotView : MonoBehaviour
         }
 
         SetAlpha(1f);
+
+        if (fadeCancellation != null && !fadeCancellation.IsCancellationRequested)
+        {
+            fadeCancellation.Dispose();
+            fadeCancellation = null;
+        }
+    }
+
+    // 알파값을 1에서 0까지 낮춘 뒤 캐릭터 슬롯을 숨긴다.
+    private async UniTaskVoid FadeOutAsync(float duration, CancellationToken cancellationToken)
+    {
+        float elapsed = 0f;
+        float startAlpha = image.color.a;
+
+        while (elapsed < duration)
+        {
+            cancellationToken.ThrowIfCancellationRequested();
+            elapsed += Time.deltaTime;
+            SetAlpha(Mathf.Lerp(startAlpha, 0f, Mathf.Clamp01(elapsed / duration)));
+            await UniTask.Yield(PlayerLoopTiming.Update, cancellationToken);
+        }
+
+        SetAlpha(1f);
+        image.enabled = false;
 
         if (fadeCancellation != null && !fadeCancellation.IsCancellationRequested)
         {

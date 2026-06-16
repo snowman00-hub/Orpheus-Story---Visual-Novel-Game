@@ -13,8 +13,13 @@ MonoBehaviour:
   m_Name: ch05_014_visual
   m_EditorClassIdentifier: Assembly-CSharp::VisualEvent
   key: ch05_014_visual
-  background: {fileID: 0}
+  background: {fileID: 21300000, guid: 212d1be5e34d9b54c8bf81b0655a3a9d, type: 3}
   cg: {fileID: 0}
   bgm: {fileID: 0}
   sfx: {fileID: 0}
-  characters: []
+  effects: []
+  characters:
+  - Image: {fileID: 21300000, guid: 5191725f4d3f2ca4781075c183621163, type: 3}
+    AnchoredPosition: {x: 31, y: -134}
+    Scale: 1.5
+    Visible: 1
