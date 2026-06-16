@@ -16,11 +16,17 @@ public class DialogueView : MonoBehaviour
     [SerializeField] private Transform choiceRoot;
     [SerializeField] private Button choiceButtonPrefab;
     [SerializeField] private DialogueSpeakerStyleLibrary speakerStyles;
+    [SerializeField] private CanvasGroup canvasGroup;
 
     private readonly List<Button> spawnedChoiceButtons = new List<Button>();
     private CancellationTokenSource typingCancellation;
 
     public bool IsTyping => bodyTypewriter.IsTyping;
+
+    private void Awake()
+    {
+        EnsureCanvasGroup();
+    }
 
     // 대사 한 줄의 화자와 본문을 UI에 표시한다.
     public void ShowLine(DialogueLine line)
@@ -55,6 +61,46 @@ public class DialogueView : MonoBehaviour
         ClearChoices();
         speakerText.gameObject.SetActive(false);
         bodyTypewriter.SetImmediately(string.Empty);
+    }
+
+    // 선택지 이벤트에서 대사 텍스트를 완전히 숨긴다.
+    public void HideDialogueTextImmediate()
+    {
+        StopTyping();
+        ClearChoices();
+        speakerText.gameObject.SetActive(false);
+        bodyTypewriter.SetImmediately(string.Empty);
+    }
+
+    // 대사창 전체를 페이드인/아웃한다. 
+    public async UniTask FadeAsync(float targetAlpha, float duration, CancellationToken cancellationToken)
+    {
+        EnsureCanvasGroup();
+
+        if (duration <= 0f)
+        {
+            canvasGroup.alpha = targetAlpha;
+            canvasGroup.interactable = targetAlpha > 0f;
+            canvasGroup.blocksRaycasts = targetAlpha > 0f;
+            return;
+        }
+
+        float startAlpha = canvasGroup.alpha;
+        float elapsed = 0f;
+        canvasGroup.interactable = false;
+        canvasGroup.blocksRaycasts = false;
+
+        while (elapsed < duration)
+        {
+            cancellationToken.ThrowIfCancellationRequested();
+            elapsed += Time.unscaledDeltaTime;
+            canvasGroup.alpha = Mathf.Lerp(startAlpha, targetAlpha, Mathf.Clamp01(elapsed / duration));
+            await UniTask.Yield(PlayerLoopTiming.Update, cancellationToken);
+        }
+
+        canvasGroup.alpha = targetAlpha;
+        canvasGroup.interactable = targetAlpha > 0f;
+        canvasGroup.blocksRaycasts = targetAlpha > 0f;
     }
 
     // 선택지 버튼들을 생성하고 선택 콜백을 연결한다.
@@ -129,6 +175,20 @@ public class DialogueView : MonoBehaviour
         typingCancellation.Cancel();
         typingCancellation.Dispose();
         typingCancellation = null;
+    }
+
+    private void EnsureCanvasGroup()
+    {
+        if (canvasGroup != null)
+        {
+            return;
+        }
+
+        canvasGroup = GetComponent<CanvasGroup>();
+        if (canvasGroup == null)
+        {
+            canvasGroup = gameObject.AddComponent<CanvasGroup>();
+        }
     }
 
     private void OnDestroy()

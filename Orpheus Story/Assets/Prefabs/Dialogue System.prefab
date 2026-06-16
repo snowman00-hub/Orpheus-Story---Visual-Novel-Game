@@ -12,6 +12,7 @@ GameObject:
   - component: {fileID: 4310656700637495798}
   - component: {fileID: 4210549196560700891}
   - component: {fileID: 2076578436820254760}
+  - component: {fileID: 410423168956237158}
   m_Layer: 0
   m_Name: Dialogue System
   m_TagString: Untagged
@@ -46,7 +47,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 554836cba89e2114b99d894f4aaa3e7e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::DialogueManager
-  startId: ch02_001
+  startId: ch01_019
   dialogueView: {fileID: 0}
   visualController: {fileID: 4210549196560700891}
   visualEvents: {fileID: 11400000, guid: 3042edd267ebdd14fbbb2bea725ac1ff, type: 2}
@@ -67,6 +68,7 @@ MonoBehaviour:
   backgroundImage: {fileID: 0}
   cgImage: {fileID: 0}
   effectRootCanvas: {fileID: 0}
+  visualTransition: {fileID: 410423168956237158}
   characterRoot: {fileID: 0}
   characterViewPrefab: {fileID: 8444590360813540488, guid: 1fcfde394553de24faa04c90790204fc, type: 3}
   characterFadeInDuration: 0.35
@@ -86,3 +88,24 @@ MonoBehaviour:
   cgImage: {fileID: 0}
   characterRoot: {fileID: 0}
   characterViewPrefab: {fileID: 8444590360813540488, guid: 1fcfde394553de24faa04c90790204fc, type: 3}
+--- !u!114 &410423168956237158
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3295832528026249683}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: feb0342798420cf4bac2d484287ce9fb, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::VisualTransition
+  rootCanvas: {fileID: 0}
+  coverColor: {r: 0, g: 0, b: 0, a: 1}
+  dialogueFadeOutDuration: 0.2
+  coverFadeInDuration: 0.25
+  revealDuration: 0.8
+  dialogueFadeInDuration: 0.2
+  curtainColumnCount: 64
+  waveStrength: 0.08
+  waveFrequency: 18

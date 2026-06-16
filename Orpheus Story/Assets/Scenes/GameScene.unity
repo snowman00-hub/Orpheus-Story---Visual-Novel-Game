@@ -550,6 +550,7 @@ MonoBehaviour:
   choiceRoot: {fileID: 0}
   choiceButtonPrefab: {fileID: 0}
   speakerStyles: {fileID: 11400000, guid: 2c2620228415a5049b2aca0c5879c959, type: 2}
+  canvasGroup: {fileID: 0}
 --- !u!1 &1280021631
 GameObject:
   m_ObjectHideFlags: 0
@@ -746,7 +747,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1797555554}
-  m_Enabled: 0
+  m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: fe87c0e1cc204ed48ad3b37840f39efc, type: 3}
   m_Name: 
@@ -759,7 +760,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 0}
+  m_Sprite: {fileID: -7144290929766801545, guid: 971c3d16b7c59084da52886a564e8710, type: 3}
   m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1
@@ -946,10 +947,8 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7207525221591354663, guid: ffccf7c655c80c9418aae47bcf1d0972, type: 3}
       propertyPath: m_text
-      value: "\uB9AC\uB77C\uB97C \uBA48\uCD98 \uCC44 \uD544\uC0AC\uC801\uC73C\uB85C
-        \uC18C\uB9AC\uCE58\uBA70 \uB2EC\uB824\uC624\uB358 \uC624\uB974\uD398\uC6B0\uC2A4.
-        \uADF8\uB294 \uBE44\uD2C0\uAC70\uB9AC\uBA70 \uADF8\uB140\uC758 \uACC1\uC5D0
-        \uBB34\uB98E\uC744 \uAFC7\uC5C8\uB2E4."
+      value: "\"\uC5D0\uC6B0\uB9AC\uB514\uCF00... \uAD1C\uCC2E\uC544? \uBB34\uC2A8
+        \uC77C\uC774\uC57C? \uC65C \uC5EC\uAE30 \uC788\uC5B4?\""
       objectReference: {fileID: 0}
     - target: {fileID: 7744195892634547968, guid: ffccf7c655c80c9418aae47bcf1d0972, type: 3}
       propertyPath: m_Name
@@ -968,6 +967,38 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 410423168956237158, guid: 1a30ada14197fb24ea04a3fb99ef7db3, type: 3}
+      propertyPath: rootCanvas
+      value: 
+      objectReference: {fileID: 209554045}
+    - target: {fileID: 410423168956237158, guid: 1a30ada14197fb24ea04a3fb99ef7db3, type: 3}
+      propertyPath: waveStrength
+      value: 0.007
+      objectReference: {fileID: 0}
+    - target: {fileID: 410423168956237158, guid: 1a30ada14197fb24ea04a3fb99ef7db3, type: 3}
+      propertyPath: waveFrequency
+      value: 30
+      objectReference: {fileID: 0}
+    - target: {fileID: 410423168956237158, guid: 1a30ada14197fb24ea04a3fb99ef7db3, type: 3}
+      propertyPath: revealDuration
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 410423168956237158, guid: 1a30ada14197fb24ea04a3fb99ef7db3, type: 3}
+      propertyPath: coverFadeInDuration
+      value: 0.3
+      objectReference: {fileID: 0}
+    - target: {fileID: 410423168956237158, guid: 1a30ada14197fb24ea04a3fb99ef7db3, type: 3}
+      propertyPath: curtainSegmentCount
+      value: 96
+      objectReference: {fileID: 0}
+    - target: {fileID: 410423168956237158, guid: 1a30ada14197fb24ea04a3fb99ef7db3, type: 3}
+      propertyPath: dialogueFadeInDuration
+      value: 0.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 410423168956237158, guid: 1a30ada14197fb24ea04a3fb99ef7db3, type: 3}
+      propertyPath: dialogueFadeOutDuration
+      value: 0.5
+      objectReference: {fileID: 0}
     - target: {fileID: 2076578436820254760, guid: 1a30ada14197fb24ea04a3fb99ef7db3, type: 3}
       propertyPath: cgImage
       value: 
@@ -1040,10 +1071,6 @@ PrefabInstance:
       propertyPath: effectRootCanvas
       value: 
       objectReference: {fileID: 209554045}
-    - target: {fileID: 4310656700637495798, guid: 1a30ada14197fb24ea04a3fb99ef7db3, type: 3}
-      propertyPath: startId
-      value: ch01_001
-      objectReference: {fileID: 0}
     - target: {fileID: 4310656700637495798, guid: 1a30ada14197fb24ea04a3fb99ef7db3, type: 3}
       propertyPath: dialogueView
       value: 
@@ -1167,7 +1194,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7677453789472429512, guid: ffd267f9c28bf784b89607c0c81835ef, type: 3}
       propertyPath: m_IsActive
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []

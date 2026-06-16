@@ -16,6 +16,7 @@ public class DialogueManager : MonoBehaviour
     private Dictionary<string, DialogueLine> linesById;
     private DialogueLine currentLine;
     private bool waitingForChoice; // 선택지 표시 중인지 여부를 나타낸다.
+    private bool isApplyingLine; // 연출 적용 중인지 여부를 나타내며, 이 동안 Confirm 입력은 무시된다.
     private GameInput gameInput;
 
     // 시작 전에 모든 챕터 CSV를 읽어 대사 사전을 준비한다.
@@ -49,7 +50,7 @@ public class DialogueManager : MonoBehaviour
     // Confirm 입력을 기다려 타이핑 완료 또는 다음 대사 진행을 처리한다.
     private async UniTaskVoid RunDialogueAsync(CancellationToken cancellationToken)
     {
-        ShowLine(startId);
+        await ShowLineAsync(startId, cancellationToken);
 
         while (!cancellationToken.IsCancellationRequested)
         {
@@ -69,7 +70,7 @@ public class DialogueManager : MonoBehaviour
             }
             else
             {
-                Advance();
+                await AdvanceAsync(cancellationToken);
             }
 
             await UniTask.Yield(PlayerLoopTiming.Update, cancellationToken);
@@ -79,7 +80,7 @@ public class DialogueManager : MonoBehaviour
     // 현재 Confirm 입력을 처리할 수 있는지 확인한다.
     private bool ShouldHandleConfirmInput()
     {        
-        if (!advanceByConfirmInput || currentLine == null)
+        if (!advanceByConfirmInput || currentLine == null || isApplyingLine)
         {
             return false;
         }
@@ -96,17 +97,27 @@ public class DialogueManager : MonoBehaviour
     // 현재 대사의 nextId를 따라 다음 대사로 이동한다.
     public void Advance()
     {
+        AdvanceAsync(this.GetCancellationTokenOnDestroy()).Forget();
+    }
+
+    private async UniTask AdvanceAsync(CancellationToken cancellationToken)
+    {
         if (!currentLine.HasNext)
         {
             Debug.Log("Dialogue reached the end.");
             return;
         }
 
-        ShowLine(currentLine.NextId);
+        await ShowLineAsync(currentLine.NextId, cancellationToken);
     }
 
     // 지정한 id의 대사를 화면에 표시하고 필요한 연출과 선택지를 적용한다.
     public void ShowLine(string id)
+    {
+        ShowLineAsync(id, this.GetCancellationTokenOnDestroy()).Forget();
+    }
+
+    private async UniTask ShowLineAsync(string id, CancellationToken cancellationToken)
     {
         waitingForChoice = false;
 
@@ -117,7 +128,16 @@ public class DialogueManager : MonoBehaviour
         }
 
         currentLine = line;
-        ApplyVisualEvent(line.VisualEventKey);
+        isApplyingLine = true;
+        try
+        {
+            // 대사에 연결된 화면 연출이 있으면 적용한다.
+            await ApplyVisualEventAsync(line.VisualEventKey, cancellationToken);
+        }
+        finally
+        {
+            isApplyingLine = false;
+        }
 
         if (line.HasChoice)
         {
@@ -130,11 +150,11 @@ public class DialogueManager : MonoBehaviour
     }
 
     // visualEventKey와 연결된 연출 SO를 찾아 화면 연출 컨트롤러에 전달한다.
-    private void ApplyVisualEvent(string visualEventKey)
+    private async UniTask ApplyVisualEventAsync(string visualEventKey, CancellationToken cancellationToken)
     {
         if (visualEvents.TryGet(visualEventKey, out VisualEvent visualEvent))
         {
-            visualController.Apply(visualEvent);
+            await visualController.ApplyAsync(visualEvent, dialogueView, cancellationToken);
         }
     }
 
@@ -153,7 +173,7 @@ public class DialogueManager : MonoBehaviour
         dialogueView.ShowChoices(choiceSet.Options, option =>
         {
             waitingForChoice = false;
-            ShowLine(option.NextId);
+            ShowLineAsync(option.NextId, this.GetCancellationTokenOnDestroy()).Forget();
         });
     }
 }
