@@ -1,0 +1,20 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d1c328f27b1663948b13c98ad0ba0534, type: 3}
+  m_Name: ch07_final_choice
+  m_EditorClassIdentifier: Assembly-CSharp::DialogueChoiceSet
+  choiceKey: ch07_final_choice
+  options:
+  - Label: "A. \uB4A4\uB97C \uB3CC\uC544\uBCF8\uB2E4"
+    NextId: ch07_original_001
+  - Label: "B. \uC55E\uB9CC \uBCF4\uACE0 \uB098\uC544\uAC04\uB2E4"
+    NextId: ch07_true_001

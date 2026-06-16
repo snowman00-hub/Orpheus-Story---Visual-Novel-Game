@@ -12,4 +12,5 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c3cb1a21b5dd5d14ba77d6b134d83db0, type: 3}
   m_Name: Dialogue Choice Library
   m_EditorClassIdentifier: Assembly-CSharp::DialogueChoiceLibrary
-  choices: []
+  choices:
+  - {fileID: 11400000, guid: aec2b250c023dc041a1b3003400fdeb6, type: 2}

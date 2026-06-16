@@ -4,7 +4,6 @@ using System.Threading;
 using Cysharp.Threading.Tasks;
 using TMPro;
 using UnityEngine;
-using UnityEngine.UI;
 
 // 대사창, 화자 이름, 선택지 버튼을 화면에 표시한다.
 public class DialogueView : MonoBehaviour
@@ -13,12 +12,13 @@ public class DialogueView : MonoBehaviour
 
     [SerializeField] private TextMeshProUGUI speakerText;
     [SerializeField] private TypewriterText bodyTypewriter;
-    [SerializeField] private Transform choiceRoot;
-    [SerializeField] private Button choiceButtonPrefab;
+    [SerializeField] private GameObject choiceWindow;
+    [SerializeField] private Transform choiceSlotRoot;
+    [SerializeField] private ChoiceSlot choiceSlotPrefab;
     [SerializeField] private DialogueSpeakerStyleLibrary speakerStyles;
     [SerializeField] private CanvasGroup canvasGroup;
 
-    private readonly List<Button> spawnedChoiceButtons = new List<Button>();
+    private readonly List<ChoiceSlot> spawnedChoiceSlots = new List<ChoiceSlot>();
     private CancellationTokenSource typingCancellation;
 
     public bool IsTyping => bodyTypewriter.IsTyping;
@@ -107,28 +107,38 @@ public class DialogueView : MonoBehaviour
     public void ShowChoices(IReadOnlyList<DialogueChoiceOption> options, Action<DialogueChoiceOption> onSelected)
     {
         ClearChoices();
+        choiceWindow.SetActive(true);
 
         foreach (DialogueChoiceOption option in options)
         {
-            Button button = Instantiate(choiceButtonPrefab, choiceRoot);
-            TextMeshProUGUI label = button.GetComponentInChildren<TextMeshProUGUI>();
-            label.SetText(option.Label);
+            ChoiceSlot slot = Instantiate(choiceSlotPrefab, choiceSlotRoot);
+            slot.Setup(option, selectedOption =>
+            {
+                ClearChoices();
+                onSelected?.Invoke(selectedOption);
+            });
 
-            DialogueChoiceOption capturedOption = option;
-            button.onClick.AddListener(() => onSelected(capturedOption));
-            spawnedChoiceButtons.Add(button);
+            spawnedChoiceSlots.Add(slot);
         }
     }
 
     // 현재 표시 중인 선택지 버튼들을 모두 제거한다.
     private void ClearChoices()
     {
-        foreach (Button button in spawnedChoiceButtons)
+        if (choiceSlotRoot != null)
         {
-            Destroy(button.gameObject);
+            for (int i = choiceSlotRoot.childCount - 1; i >= 0; i--)
+            {
+                Destroy(choiceSlotRoot.GetChild(i).gameObject);
+            }
         }
 
-        spawnedChoiceButtons.Clear();
+        spawnedChoiceSlots.Clear();
+
+        if (choiceWindow != null)
+        {
+            choiceWindow.SetActive(false);
+        }
     }
 
     // 화자 텍스트 표시 여부와 색상을 적용한다.
