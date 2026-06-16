@@ -9,9 +9,13 @@ public class VisualEventEditorPalette : ScriptableObject
     [SerializeField] private List<Sprite> characters = new List<Sprite>();
     [SerializeField] private List<Sprite> cgs = new List<Sprite>();
     [SerializeField] private List<VisualEffect> effects = new List<VisualEffect>();
+    [SerializeField] private List<AudioClip> bgms = new List<AudioClip>();
+    [SerializeField] private List<AudioClip> sfxs = new List<AudioClip>();
 
     public IReadOnlyList<Sprite> Backgrounds => backgrounds;
     public IReadOnlyList<Sprite> Characters => characters;
     public IReadOnlyList<Sprite> Cgs => cgs;
     public IReadOnlyList<VisualEffect> Effects => effects;
+    public IReadOnlyList<AudioClip> Bgms => bgms;
+    public IReadOnlyList<AudioClip> Sfxs => sfxs;
 }

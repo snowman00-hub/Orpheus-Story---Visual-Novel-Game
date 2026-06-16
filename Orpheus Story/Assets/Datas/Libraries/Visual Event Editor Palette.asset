@@ -56,3 +56,14 @@ MonoBehaviour:
   - {fileID: 21300000, guid: 77992a049dce2e64d88300466a2fc09a, type: 3}
   effects:
   - {fileID: 11400000, guid: 6837386aa4a71b243a58fb36619cb7f7, type: 2}
+  bgms:
+  - {fileID: 8300000, guid: 0a1a18b2743fb7d4587aeca6d26a6237, type: 3}
+  - {fileID: 8300000, guid: 33820752dcc9afd47af91c8cf8249111, type: 3}
+  - {fileID: 8300000, guid: 549d301db44baf5488c31f4634ef919e, type: 3}
+  sfxs:
+  - {fileID: 8300000, guid: f2a4db91c70dbc548819c4ce1e8ba189, type: 3}
+  - {fileID: 8300000, guid: 3618ec99af8b3e04e85f5caf99acd4de, type: 3}
+  - {fileID: 8300000, guid: 63c5bbd4cb0fa8b4ea895e42e5966135, type: 3}
+  - {fileID: 8300000, guid: 1f3eb584323008548964ce8ebda22d41, type: 3}
+  - {fileID: 8300000, guid: 9df6fb9f18497f049bf508a490e2abed, type: 3}
+  - {fileID: 8300000, guid: afcc0f3e872ffa443bb5880f51a2a3c0, type: 3}

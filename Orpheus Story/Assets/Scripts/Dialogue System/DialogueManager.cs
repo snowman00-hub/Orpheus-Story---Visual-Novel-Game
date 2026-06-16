@@ -127,6 +127,7 @@ public class DialogueManager : MonoBehaviour
             return;
         }
 
+        StopBgmIfChapterChanged(currentLine, line);
         currentLine = line;
         isApplyingLine = true;
         try
@@ -159,6 +160,25 @@ public class DialogueManager : MonoBehaviour
     }
 
     // choiceKey와 연결된 선택지 묶음을 UI에 표시한다.
+    private static void StopBgmIfChapterChanged(DialogueLine previousLine, DialogueLine nextLine)
+    {
+        if (previousLine == null || SoundManager.Instance == null)
+        {
+            return;
+        }
+
+        if (GetChapterKey(previousLine.Id) != GetChapterKey(nextLine.Id))
+        {
+            SoundManager.Instance.StopBgm();
+        }
+    }
+
+    private static string GetChapterKey(string lineId)
+    {
+        int separatorIndex = lineId.IndexOf('_');
+        return separatorIndex < 0 ? lineId : lineId.Substring(0, separatorIndex);
+    }
+
     private void ShowChoice(string choiceKey)
     {
         waitingForChoice = true;

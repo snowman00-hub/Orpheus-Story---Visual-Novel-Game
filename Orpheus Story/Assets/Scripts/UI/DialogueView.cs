@@ -129,7 +129,7 @@ public class DialogueView : MonoBehaviour
         {
             for (int i = choiceSlotRoot.childCount - 1; i >= 0; i--)
             {
-                Destroy(choiceSlotRoot.GetChild(i).gameObject);
+                DestroyChoiceObject(choiceSlotRoot.GetChild(i).gameObject);
             }
         }
 
@@ -142,6 +142,18 @@ public class DialogueView : MonoBehaviour
     }
 
     // 화자 텍스트 표시 여부와 색상을 적용한다.
+    private static void DestroyChoiceObject(GameObject target)
+    {
+        if (Application.isPlaying)
+        {
+            Destroy(target);
+        }
+        else
+        {
+            DestroyImmediate(target);
+        }
+    }
+
     private void ApplySpeaker(DialogueLine line)
     {
         bool isNarration = line.Speaker == NarrationSpeakerName;

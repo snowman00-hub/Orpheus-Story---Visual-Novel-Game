@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection;
 using System.Threading;
 using Cysharp.Threading.Tasks;
 using UnityEditor;
@@ -23,7 +24,7 @@ public class VisualEventEditorWindow : EditorWindow
     private const int PaletteExtraRows = 2;
 
     private readonly string[] chapters = { "ch01", "ch02", "ch03", "ch04", "ch05", "ch06", "ch07" };
-    private readonly string[] paletteTabs = { "Backgrounds", "Characters", "CGs", "Effects" };
+    private readonly string[] paletteTabs = { "Backgrounds", "Characters", "CGs", "Effects", "BGM", "SFX" };
 
     private int chapterIndex;
     private int lineIndex;
@@ -72,6 +73,7 @@ public class VisualEventEditorWindow : EditorWindow
     private void OnDisable()
     {
         CancelPreviewEffect();
+        StopAudioPreview();
         SaveEditorPosition();
         SaveScrollPosition();
     }
@@ -285,6 +287,14 @@ public class VisualEventEditorWindow : EditorWindow
         {
             DrawEffectPalette();
         }
+        else if (paletteTabIndex == 4)
+        {
+            DrawAudioPalette("bgm", palette.Bgms);
+        }
+        else if (paletteTabIndex == 5)
+        {
+            DrawAudioPalette("sfx", palette.Sfxs);
+        }
         else
         {
             DrawSpriteGrid(GetCurrentPaletteSprites(), GetCurrentPaletteAction());
@@ -431,6 +441,178 @@ public class VisualEventEditorWindow : EditorWindow
         EditorUtility.SetDirty(visualEvent);
         AssetDatabase.SaveAssets();
         currentVisualEvent = visualEvent;
+    }
+
+    private void DrawAudioPalette(string propertyName, IReadOnlyList<AudioClip> clips)
+    {
+        VisualEvent visualEvent = currentVisualEvent;
+        if (visualEvent == null)
+        {
+            EditorGUILayout.HelpBox("Create/Load current VisualEvent first.", MessageType.Info);
+            return;
+        }
+
+        SerializedObject serializedObject = new SerializedObject(visualEvent);
+        SerializedProperty audioProperty = serializedObject.FindProperty(propertyName);
+
+        EditorGUILayout.LabelField(propertyName.ToUpperInvariant(), EditorStyles.boldLabel);
+        EditorGUI.BeginChangeCheck();
+        using (new EditorGUILayout.HorizontalScope())
+        {
+            EditorGUILayout.PropertyField(audioProperty, new GUIContent("Current"));
+            AudioClip currentClip = audioProperty.objectReferenceValue as AudioClip;
+
+            EditorGUI.BeginDisabledGroup(currentClip == null);
+            if (GUILayout.Button("Play", GUILayout.Width(60f)))
+            {
+                PlayAudioPreview(currentClip);
+                GUI.FocusControl(null);
+            }
+            EditorGUI.EndDisabledGroup();
+
+            if (GUILayout.Button("Stop", GUILayout.Width(60f)))
+            {
+                StopAudioPreview();
+                GUI.FocusControl(null);
+            }
+
+            if (GUILayout.Button("Clear", GUILayout.Width(80f)))
+            {
+                audioProperty.objectReferenceValue = null;
+                GUI.FocusControl(null);
+            }
+        }
+
+        if (EditorGUI.EndChangeCheck())
+        {
+            serializedObject.ApplyModifiedProperties();
+            EditorUtility.SetDirty(visualEvent);
+            AssetDatabase.SaveAssets();
+        }
+
+        EditorGUILayout.Space(8f);
+
+        if (clips.Count == 0)
+        {
+            EditorGUILayout.HelpBox("No audio clips registered in the palette.", MessageType.Info);
+            return;
+        }
+
+        foreach (AudioClip clip in clips)
+        {
+            using (new EditorGUILayout.HorizontalScope())
+            {
+                EditorGUI.BeginDisabledGroup(clip == null);
+                EditorGUILayout.ObjectField(clip, typeof(AudioClip), false);
+
+                if (GUILayout.Button("Play", GUILayout.Width(60f)))
+                {
+                    PlayAudioPreview(clip);
+                    GUI.FocusControl(null);
+                }
+
+                if (GUILayout.Button("Set", GUILayout.Width(80f)))
+                {
+                    SetAudioClip(propertyName, clip);
+                    GUI.FocusControl(null);
+                }
+
+                EditorGUI.EndDisabledGroup();
+            }
+        }
+    }
+
+    private void SetAudioClip(string propertyName, AudioClip clip)
+    {
+        VisualEvent visualEvent = GetOrCreateCurrentVisualEvent();
+        if (visualEvent == null || clip == null)
+        {
+            return;
+        }
+
+        SerializedObject serializedObject = new SerializedObject(visualEvent);
+        serializedObject.FindProperty(propertyName).objectReferenceValue = clip;
+        serializedObject.ApplyModifiedProperties();
+
+        EditorUtility.SetDirty(visualEvent);
+        AssetDatabase.SaveAssets();
+        currentVisualEvent = visualEvent;
+    }
+
+    private void PlayAudioPreview(AudioClip clip)
+    {
+        if (clip == null)
+        {
+            return;
+        }
+
+        StopAudioPreview();
+
+        if (!TryInvokeAudioUtil("PlayPreviewClip", clip, 0, false))
+        {
+            if (!TryInvokeAudioUtil("PlayClip", clip, 0, false))
+            {
+                TryInvokeAudioUtil("PlayClip", clip);
+            }
+        }
+    }
+
+    private void StopAudioPreview()
+    {
+        TryInvokeAudioUtil("StopAllPreviewClips");
+        TryInvokeAudioUtil("StopAllClips");
+    }
+
+    private static bool TryInvokeAudioUtil(string methodName, params object[] args)
+    {
+        System.Type audioUtilType = typeof(AudioImporter).Assembly.GetType("UnityEditor.AudioUtil");
+        if (audioUtilType == null)
+        {
+            return false;
+        }
+
+        MethodInfo method = audioUtilType
+            .GetMethods(BindingFlags.Static | BindingFlags.Public | BindingFlags.NonPublic)
+            .FirstOrDefault(candidate => candidate.Name == methodName && ParametersMatch(candidate.GetParameters(), args));
+
+        if (method == null)
+        {
+            return false;
+        }
+
+        method.Invoke(null, args);
+        return true;
+    }
+
+    private static bool ParametersMatch(ParameterInfo[] parameters, object[] args)
+    {
+        if (parameters.Length != args.Length)
+        {
+            return false;
+        }
+
+        for (int i = 0; i < parameters.Length; i++)
+        {
+            object arg = args[i];
+            System.Type parameterType = parameters[i].ParameterType;
+
+            if (arg == null)
+            {
+                if (parameterType.IsValueType)
+                {
+                    return false;
+                }
+
+                continue;
+            }
+
+            if (!parameterType.IsInstanceOfType(arg))
+            {
+                return false;
+            }
+        }
+
+        return true;
     }
 
     private static void DeleteArrayElement(SerializedProperty arrayProperty, int index)

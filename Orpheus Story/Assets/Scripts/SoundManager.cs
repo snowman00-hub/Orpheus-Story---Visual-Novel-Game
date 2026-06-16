@@ -34,6 +34,12 @@ public class SoundManager : MonoBehaviour
     }
 
     // 효과음을 한 번 재생한다.
+    public void StopBgm()
+    {
+        bgmSource.Stop();
+        bgmSource.clip = null;
+    }
+
     public void PlaySfx(AudioClip clip)
     {
         if (clip == null)
