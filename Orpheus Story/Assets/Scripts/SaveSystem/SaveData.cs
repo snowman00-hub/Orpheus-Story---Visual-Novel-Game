@@ -9,4 +9,5 @@ public class SaveData
     public string Chapter { get; set; }
     public string PreviewText { get; set; }
     public string SavedAt { get; set; }
+    public string ThumbnailPath { get; set; }
 }

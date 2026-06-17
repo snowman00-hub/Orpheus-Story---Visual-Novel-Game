@@ -58,6 +58,13 @@ public static class SaveSystemWindowBuilder
             CreateSlot(content, i);
         }
 
+        CreateConfirmPopup(root.transform);
+
+        if (root.GetComponent<SaveLoadWindow>() == null)
+        {
+            root.AddComponent<SaveLoadWindow>();
+        }
+
         EditorUtility.SetDirty(root);
         EditorSceneManager.MarkSceneDirty(root.scene);
         Debug.Log("Built Save System Window UI.");
@@ -68,6 +75,7 @@ public static class SaveSystemWindowBuilder
         GameObject slot = CreateRect($"Save Slot {index:00}", parent, Center(), Center(), Vector2.zero, new Vector2(0f, 112f));
         AddImage(slot, SlotColor);
         slot.AddComponent<Button>();
+        slot.AddComponent<SaveSlotView>();
 
         LayoutElement layout = slot.AddComponent<LayoutElement>();
         layout.preferredHeight = 112f;
@@ -79,6 +87,21 @@ public static class SaveSystemWindowBuilder
         CreateText("Chapter Text", slot.transform, "No Data", LeftTop(), LeftTop(), new Vector2(300f, -53f), new Vector2(260f, 28f), 21f, TextAlignmentOptions.Left, TextColor);
         CreateText("Preview Text", slot.transform, "Saved dialogue preview will appear here.", LeftTop(), LeftTop(), new Vector2(480f, -84f), new Vector2(620f, 26f), 16f, TextAlignmentOptions.Left, MutedTextColor);
         CreateText("Saved At", slot.transform, "----.--.-- --:--", RightTop(), RightTop(), new Vector2(-126f, -31f), new Vector2(210f, 24f), 16f, TextAlignmentOptions.Right, MutedTextColor);
+    }
+
+    private static void CreateConfirmPopup(Transform parent)
+    {
+        GameObject popup = CreateRect("Confirm Popup", parent, Center(), Center(), Vector2.zero, new Vector2(620f, 300f));
+        AddImage(popup, new Color(0.035f, 0.04f, 0.05f, 0.96f));
+        popup.AddComponent<ConfirmPopup>();
+
+        CreateText("Message", popup.transform, "Are you sure?", Top(), Top(), new Vector2(0f, -84f), new Vector2(520f, 64f), 26f, TextAlignmentOptions.Center, TextColor);
+
+        GameObject buttons = CreateRect("Buttons", popup.transform, Bottom(), Bottom(), new Vector2(0f, 70f), new Vector2(440f, 56f));
+        CreateButton("Yes Button", buttons.transform, "Yes", new Vector2(-110f, 0f), new Vector2(180f, 52f), 22f);
+        CreateButton("No Button", buttons.transform, "No", new Vector2(110f, 0f), new Vector2(180f, 52f), 22f);
+
+        popup.SetActive(false);
     }
 
     private static GameObject CreateScrollView(Transform parent)

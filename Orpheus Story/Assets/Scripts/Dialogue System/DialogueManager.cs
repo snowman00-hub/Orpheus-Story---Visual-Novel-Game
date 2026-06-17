@@ -11,6 +11,7 @@ public class DialogueManager : MonoBehaviour
     [SerializeField] private VisualEventController visualController;
     [SerializeField] private VisualEventLibrary visualEvents;
     [SerializeField] private DialogueChoiceLibrary choices;
+    [SerializeField] private SaveLoadWindow saveLoadWindow;
     [SerializeField] private bool advanceByConfirmInput = true; // Confirm 입력으로 타이핑 완료 또는 다음 대사 진행 여부를 결정한다.
 
     private Dictionary<string, DialogueLine> linesById;
@@ -53,7 +54,7 @@ public class DialogueManager : MonoBehaviour
     // Confirm 입력을 기다려 타이핑 완료 또는 다음 대사 진행을 처리한다.
     private async UniTaskVoid RunDialogueAsync(CancellationToken cancellationToken)
     {
-        await ShowLineAsync(startId, cancellationToken);
+        await ShowLineAsync(GameStartState.ConsumeStartLineId(startId), cancellationToken);
 
         while (!cancellationToken.IsCancellationRequested)
         {
@@ -83,7 +84,7 @@ public class DialogueManager : MonoBehaviour
     // 현재 Confirm 입력을 처리할 수 있는지 확인한다.
     private bool ShouldHandleConfirmInput()
     {        
-        if (!advanceByConfirmInput || currentLine == null || isApplyingLine)
+        if (!advanceByConfirmInput || currentLine == null || isApplyingLine || saveLoadWindow.IsOpen)
         {
             return false;
         }
@@ -123,13 +124,19 @@ public class DialogueManager : MonoBehaviour
     // 현재 대사 진행 상태를 지정한 슬롯에 저장한다.
     public void SaveCurrentLine(int slotIndex)
     {
+        SaveCurrentLine(slotIndex, string.Empty);
+    }
+
+    // 현재 대사 진행 상태와 썸네일 경로를 지정한 슬롯에 저장한다.
+    public void SaveCurrentLine(int slotIndex, string thumbnailPath)
+    {
         if (!CanSave)
         {
             Debug.LogWarning("Cannot save current dialogue state.");
             return;
         }
 
-        SaveSystem.Save(slotIndex, currentLine);
+        SaveSystem.Save(slotIndex, currentLine, thumbnailPath);
     }
 
     // 지정한 슬롯의 세이브 데이터를 불러와 해당 대사로 이동한다.
