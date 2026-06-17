@@ -19,6 +19,9 @@ public class DialogueManager : MonoBehaviour
     private bool isApplyingLine; // 연출 적용 중인지 여부를 나타내며, 이 동안 Confirm 입력은 무시된다.
     private GameInput gameInput;
 
+    public bool CanSave => currentLine != null && !waitingForChoice && !isApplyingLine;
+    public string CurrentLineId => currentLine == null ? string.Empty : currentLine.Id;
+
     // 시작 전에 모든 챕터 CSV를 읽어 대사 사전을 준비한다.
     private void Awake()
     {
@@ -115,6 +118,30 @@ public class DialogueManager : MonoBehaviour
     public void ShowLine(string id)
     {
         ShowLineAsync(id, this.GetCancellationTokenOnDestroy()).Forget();
+    }
+
+    // 현재 대사 진행 상태를 지정한 슬롯에 저장한다.
+    public void SaveCurrentLine(int slotIndex)
+    {
+        if (!CanSave)
+        {
+            Debug.LogWarning("Cannot save current dialogue state.");
+            return;
+        }
+
+        SaveSystem.Save(slotIndex, currentLine);
+    }
+
+    // 지정한 슬롯의 세이브 데이터를 불러와 해당 대사로 이동한다.
+    public void LoadSavedLine(int slotIndex)
+    {
+        if (!SaveSystem.TryLoad(slotIndex, out SaveData saveData))
+        {
+            Debug.LogWarning($"Save slot not found: {slotIndex}");
+            return;
+        }
+
+        ShowLine(saveData.CurrentLineId);
     }
 
     private async UniTask ShowLineAsync(string id, CancellationToken cancellationToken)
