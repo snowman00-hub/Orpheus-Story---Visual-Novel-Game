@@ -16,7 +16,7 @@ MonoBehaviour:
   background: {fileID: 21300000, guid: ce1b09bd863789f48b39ef1e011e3b23, type: 3}
   cg: {fileID: 0}
   bgm: {fileID: 0}
-  sfx: {fileID: 0}
+  sfx: {fileID: 8300000, guid: 0742854cc63d38948a99c06a8cd02cd0, type: 3}
   effects: []
   characters:
   - Image: {fileID: 21300000, guid: 8097383cd3f54c349ab9e02a9f4dcd74, type: 3}
