@@ -86,6 +86,7 @@ GameObject:
   - component: {fileID: 2206617915617035608}
   - component: {fileID: 3038380201053268703}
   - component: {fileID: 5698581639760094453}
+  - component: {fileID: 915244926328185468}
   m_Layer: 5
   m_Name: Choice Slot Prefab
   m_TagString: Untagged
@@ -136,6 +137,30 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::ChoiceSlot
   label: {fileID: 1773549104411943552}
   button: {fileID: 1700188811335242033}
+--- !u!114 &915244926328185468
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1303207023027342678}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 99919604b4b4db7408b7fb91c2c29c42, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::TitleButtonView
+  targetImage: {fileID: 5713960185650727950}
+  label: {fileID: 1773549104411943552}
+  button: {fileID: 1700188811335242033}
+  normalColor: {r: 1, g: 1, b: 1, a: 1}
+  hoverColor: {r: 0.5330188, g: 1, b: 0.97202015, a: 1}
+  disabledColor: {r: 0.45, g: 0.45, b: 0.45, a: 0.8}
+  normalTextColor: {r: 0.9, g: 0.86, b: 0.78, a: 1}
+  hoverTextColor: {r: 0.53333336, g: 1, b: 0.972549, a: 1}
+  disabledTextColor: {r: 0.5, g: 0.5, b: 0.5, a: 0.85}
+  hoverScale: 1.035
+  pressedScale: 0.96
+  animationDuration: 0.08
 --- !u!1 &4526900032463335732
 GameObject:
   m_ObjectHideFlags: 0

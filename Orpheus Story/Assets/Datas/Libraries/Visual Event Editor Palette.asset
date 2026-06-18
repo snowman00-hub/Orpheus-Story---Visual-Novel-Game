@@ -64,6 +64,7 @@ MonoBehaviour:
   - {fileID: 8300000, guid: b4fa158020896dd488bf0537c00270a5, type: 3}
   - {fileID: 8300000, guid: 2f1b3bf5431c0c04fb54adf471cd11e6, type: 3}
   - {fileID: 8300000, guid: 24ec219ec009d0046a3b5e2d060cf508, type: 3}
+  - {fileID: 8300000, guid: 0be712f705cc5d54a9e42a53074e5e58, type: 3}
   sfxs:
   - {fileID: 8300000, guid: f2a4db91c70dbc548819c4ce1e8ba189, type: 3}
   - {fileID: 8300000, guid: 3618ec99af8b3e04e85f5caf99acd4de, type: 3}
