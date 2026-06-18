@@ -15,8 +15,9 @@ MonoBehaviour:
   key: ch01_004_visual
   background: {fileID: 21300000, guid: e5362e2d048105b4bbc404a67277483a, type: 3}
   cg: {fileID: 0}
-  bgm: {fileID: 0}
+  bgm: {fileID: 8300000, guid: 0a1a18b2743fb7d4587aeca6d26a6237, type: 3}
   sfx: {fileID: 0}
+  effects: []
   characters:
   - Image: {fileID: 21300000, guid: ee3f660362a9ecd46af33f5204dc05b6, type: 3}
     AnchoredPosition: {x: 19, y: -210}

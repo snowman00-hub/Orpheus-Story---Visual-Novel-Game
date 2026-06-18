@@ -48,7 +48,16 @@ public class SaveSlotView : MonoBehaviour
     // 현재 슬롯 클릭을 저장창에 전달한다.
     private void Submit()
     {
+        PlayUiClick();
         onClicked?.Invoke(slotIndex);
+    }
+
+    private void PlayUiClick()
+    {
+        if (SoundManager.Instance != null)
+        {
+            SoundManager.Instance.PlayUiClick();
+        }
     }
 
     // 저장된 썸네일 파일을 읽어 슬롯 이미지로 표시한다.

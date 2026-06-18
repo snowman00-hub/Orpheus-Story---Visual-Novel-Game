@@ -15,7 +15,7 @@ MonoBehaviour:
   key: ch03_023_visual
   background: {fileID: 21300000, guid: 2f5842b2cf500a84e9869fbb31dfddf9, type: 3}
   cg: {fileID: 0}
-  bgm: {fileID: 0}
+  bgm: {fileID: 8300000, guid: 80573e63591524a45b1d36ce783a5462, type: 3}
   sfx: {fileID: 0}
   effects: []
   characters: []

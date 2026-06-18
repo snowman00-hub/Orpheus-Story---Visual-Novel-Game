@@ -26,6 +26,15 @@ public class ChoiceSlot : MonoBehaviour
     // 현재 슬롯의 선택지를 실행한다.
     private void Submit()
     {
+        PlayUiClick();
         onSelected?.Invoke(option);
+    }
+
+    private void PlayUiClick()
+    {
+        if (SoundManager.Instance != null)
+        {
+            SoundManager.Instance.PlayUiClick();
+        }
     }
 }

@@ -45,7 +45,7 @@ AudioSource:
   serializedVersion: 4
   OutputAudioMixerGroup: {fileID: 0}
   m_audioClip: {fileID: 0}
-  m_Resource: {fileID: 0}
+  m_Resource: {fileID: 8300000, guid: 0a1a18b2743fb7d4587aeca6d26a6237, type: 3}
   m_PlayOnAwake: 1
   m_Volume: 0.15
   m_Pitch: 1
@@ -242,3 +242,4 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::SoundManager
   bgmSource: {fileID: 2685790449294522747}
   sfxSource: {fileID: 1207312370171467647}
+  uiClickSfx: {fileID: 8300000, guid: 74f818f363e63914d8ce8ace293bd7fc, type: 3}

@@ -300,6 +300,7 @@ GameObject:
   - component: {fileID: 3100368543667696658}
   - component: {fileID: 1463617380158812093}
   - component: {fileID: 7683966087649664126}
+  - component: {fileID: 4721305410076333961}
   m_Layer: 5
   m_Name: Title Button Prefab
   m_TagString: Untagged
@@ -376,7 +377,7 @@ MonoBehaviour:
     m_SelectedTrigger: Selected
     m_DisabledTrigger: Disabled
   m_Interactable: 1
-  m_TargetGraphic: {fileID: 0}
+  m_TargetGraphic: {fileID: 7683966087649664126}
   m_OnClick:
     m_PersistentCalls:
       m_Calls: []
@@ -410,3 +411,27 @@ MonoBehaviour:
   m_FillOrigin: 0
   m_UseSpriteMesh: 0
   m_PixelsPerUnitMultiplier: 1
+--- !u!114 &4721305410076333961
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8544732991969851784}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 99919604b4b4db7408b7fb91c2c29c42, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::TitleButtonView
+  targetImage: {fileID: 652540147173496291}
+  label: {fileID: 9206725379301030884}
+  button: {fileID: 1463617380158812093}
+  normalColor: {r: 1, g: 1, b: 1, a: 1}
+  hoverColor: {r: 0.78, g: 1, b: 0.65, a: 1}
+  disabledColor: {r: 0.45, g: 0.45, b: 0.45, a: 0.8}
+  normalTextColor: {r: 0.9, g: 0.86, b: 0.78, a: 1}
+  hoverTextColor: {r: 0.8, g: 1, b: 0.62, a: 1}
+  disabledTextColor: {r: 0.5, g: 0.5, b: 0.5, a: 0.85}
+  hoverScale: 1.035
+  pressedScale: 0.96
+  animationDuration: 0.08

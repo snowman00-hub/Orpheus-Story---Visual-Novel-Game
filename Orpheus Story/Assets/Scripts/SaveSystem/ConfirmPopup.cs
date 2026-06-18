@@ -32,7 +32,7 @@ public class ConfirmPopup : MonoBehaviour
         yesButton.onClick.AddListener(Confirm);
 
         noButton.onClick.RemoveAllListeners();
-        noButton.onClick.AddListener(Hide);
+        noButton.onClick.AddListener(Cancel);
 
         popupRoot.SetActive(true);
     }
@@ -47,8 +47,23 @@ public class ConfirmPopup : MonoBehaviour
     // 예 버튼을 눌렀을 때 등록된 동작을 실행한다.
     private void Confirm()
     {
+        PlayUiClick();
         Action action = onYes;
         Hide();
         action?.Invoke();
+    }
+
+    private void Cancel()
+    {
+        PlayUiClick();
+        Hide();
+    }
+
+    private void PlayUiClick()
+    {
+        if (SoundManager.Instance != null)
+        {
+            SoundManager.Instance.PlayUiClick();
+        }
     }
 }

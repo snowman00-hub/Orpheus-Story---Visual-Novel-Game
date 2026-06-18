@@ -34,6 +34,8 @@ public class SaveLoadWindow : MonoBehaviour
     // 저장 모드로 세이브 창을 연다.
     public void OpenSave()
     {
+        PlayUiClick();
+
         if (!allowSave)
         {
             Debug.LogWarning("Save is not allowed in this scene.");
@@ -47,6 +49,7 @@ public class SaveLoadWindow : MonoBehaviour
     // 로드 모드로 세이브 창을 연다.
     public void OpenLoad()
     {
+        PlayUiClick();
         currentMode = SaveLoadMode.Load;
         Open();
     }
@@ -192,9 +195,15 @@ public class SaveLoadWindow : MonoBehaviour
         loadModeButton.onClick.AddListener(OpenLoad);
 
         closeButton.onClick.RemoveAllListeners();
-        closeButton.onClick.AddListener(Close);
+        closeButton.onClick.AddListener(CloseByButton);
 
         UpdateModeButtonSprites();
+    }
+
+    private void CloseByButton()
+    {
+        PlayUiClick();
+        Close();
     }
 
     // 현재 저장/로드 모드에 맞게 탭 버튼 이미지를 고정한다.
@@ -202,5 +211,13 @@ public class SaveLoadWindow : MonoBehaviour
     {
         saveModeImage.sprite = currentMode == SaveLoadMode.Save ? tabSelectedSprite : tabNormalSprite;
         loadModeImage.sprite = currentMode == SaveLoadMode.Load ? tabSelectedSprite : tabNormalSprite;
+    }
+
+    private void PlayUiClick()
+    {
+        if (SoundManager.Instance != null)
+        {
+            SoundManager.Instance.PlayUiClick();
+        }
     }
 }

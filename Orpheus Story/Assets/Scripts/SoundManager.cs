@@ -7,6 +7,7 @@ public class SoundManager : MonoBehaviour
 
     [SerializeField] private AudioSource bgmSource;
     [SerializeField] private AudioSource sfxSource;
+    [SerializeField] private AudioClip uiClickSfx;
 
     private void Awake()
     {
@@ -48,6 +49,12 @@ public class SoundManager : MonoBehaviour
         }
 
         sfxSource.PlayOneShot(clip);
+    }
+
+    // 공용 UI 클릭 효과음을 재생한다.
+    public void PlayUiClick()
+    {
+        PlaySfx(uiClickSfx);
     }
 
     // BGM 볼륨을 설정한다 (0~1).
