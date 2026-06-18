@@ -13,6 +13,8 @@ public class DialogueManager : MonoBehaviour
     [SerializeField] private DialogueChoiceLibrary choices;
     [SerializeField] private SaveLoadWindow saveLoadWindow;
     [SerializeField] private bool advanceByConfirmInput = true; // Confirm 입력으로 타이핑 완료 또는 다음 대사 진행 여부를 결정한다.
+    [SerializeField] private bool skipBySkipInput = true;
+    [SerializeField] private float skipInterval = 0.08f;
 
     private Dictionary<string, DialogueLine> linesById;
     private DialogueLine currentLine;
@@ -48,7 +50,9 @@ public class DialogueManager : MonoBehaviour
     // 게임 시작 시 시작 대사를 표시하고 입력 대기 루프를 시작한다.
     private void Start()
     {
-        RunDialogueAsync(this.GetCancellationTokenOnDestroy()).Forget();
+        CancellationToken cancellationToken = this.GetCancellationTokenOnDestroy();
+        RunDialogueAsync(cancellationToken).Forget();
+        RunSkipAsync(cancellationToken).Forget();
     }
 
     // Confirm 입력을 기다려 타이핑 완료 또는 다음 대사 진행을 처리한다.
@@ -81,10 +85,47 @@ public class DialogueManager : MonoBehaviour
         }
     }
 
+    // Skip 입력을 누르고 있는 동안 대사를 빠르게 넘긴다.
+    private async UniTaskVoid RunSkipAsync(CancellationToken cancellationToken)
+    {
+        while (!cancellationToken.IsCancellationRequested)
+        {
+            bool canceled = await UniTask
+                .WaitUntil(ShouldHandleSkipInput, cancellationToken: cancellationToken)
+                .SuppressCancellationThrow();
+
+            if (canceled)
+            {
+                return;
+            }
+
+            while (ShouldHandleSkipInput() && !cancellationToken.IsCancellationRequested)
+            {
+                if (dialogueView.IsTyping)
+                {
+                    dialogueView.CompleteTyping();
+                }
+                else if (!await AdvanceAsync(cancellationToken))
+                {
+                    break;
+                }
+
+                await UniTask.Delay(
+                        Mathf.Max(1, Mathf.RoundToInt(skipInterval * 1000f)),
+                        DelayType.DeltaTime,
+                        PlayerLoopTiming.Update,
+                        cancellationToken)
+                    .SuppressCancellationThrow();
+            }
+
+            await UniTask.Yield(PlayerLoopTiming.Update, cancellationToken);
+        }
+    }
+
     // 현재 Confirm 입력을 처리할 수 있는지 확인한다.
     private bool ShouldHandleConfirmInput()
     {        
-        if (!advanceByConfirmInput || currentLine == null || isApplyingLine || saveLoadWindow.IsOpen)
+        if (!advanceByConfirmInput || !CanHandleDialogueInput())
         {
             return false;
         }
@@ -98,21 +139,44 @@ public class DialogueManager : MonoBehaviour
         return gameInput.Player.Confirm.WasPerformedThisFrame();
     }
 
+    // 현재 대사 입력을 받을 수 있는 상태인지 확인한다.
+    private bool CanHandleDialogueInput()
+    {
+        if (currentLine == null || isApplyingLine || saveLoadWindow.IsOpen)
+        {
+            return false;
+        }
+
+        if (waitingForChoice && !dialogueView.IsTyping)
+        {
+            return false;
+        }
+
+        return true;
+    }
+
+    // Skip 입력이 현재 눌려 있고 처리 가능한 상태인지 확인한다.
+    private bool ShouldHandleSkipInput()
+    {
+        return skipBySkipInput && CanHandleDialogueInput() && gameInput.Player.Skip.IsPressed();
+    }
+
     // 현재 대사의 nextId를 따라 다음 대사로 이동한다.
     public void Advance()
     {
         AdvanceAsync(this.GetCancellationTokenOnDestroy()).Forget();
     }
 
-    private async UniTask AdvanceAsync(CancellationToken cancellationToken)
+    private async UniTask<bool> AdvanceAsync(CancellationToken cancellationToken)
     {
         if (!currentLine.HasNext)
         {
             Debug.Log("Dialogue reached the end.");
-            return;
+            return false;
         }
 
         await ShowLineAsync(currentLine.NextId, cancellationToken);
+        return true;
     }
 
     // 지정한 id의 대사를 화면에 표시하고 필요한 연출과 선택지를 적용한다.

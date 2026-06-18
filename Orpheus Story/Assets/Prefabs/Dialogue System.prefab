@@ -52,7 +52,10 @@ MonoBehaviour:
   visualController: {fileID: 4210549196560700891}
   visualEvents: {fileID: 11400000, guid: 3042edd267ebdd14fbbb2bea725ac1ff, type: 2}
   choices: {fileID: 11400000, guid: 6b361e590745fb642abcf26e96f5abb5, type: 2}
+  saveLoadWindow: {fileID: 0}
   advanceByConfirmInput: 1
+  skipBySkipInput: 1
+  skipInterval: 0.06
 --- !u!114 &4210549196560700891
 MonoBehaviour:
   m_ObjectHideFlags: 0
