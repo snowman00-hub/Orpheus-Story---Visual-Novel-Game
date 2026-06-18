@@ -52,7 +52,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 395297017358844536}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: fe87c0e1cc204ed48ad3b37840f39efc, type: 3}
   m_Name: 
@@ -247,8 +247,8 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 0}
-  m_Type: 0
+  m_Sprite: {fileID: 21300000, guid: c99d409cf578e3c498e2536522e35564, type: 3}
+  m_Type: 1
   m_PreserveAspect: 0
   m_FillCenter: 1
   m_FillMethod: 4
@@ -289,10 +289,10 @@ RectTransform:
   m_Children: []
   m_Father: {fileID: 3526201957985433355}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0, y: 0}
+  m_AnchorMin: {x: 0.069000006, y: 0}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 20, y: 0}
-  m_SizeDelta: {x: -40, y: 0}
+  m_AnchoredPosition: {x: 14.034607, y: 0.00002670288}
+  m_SizeDelta: {x: -28.0688, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &701612341707227401
 CanvasRenderer:
@@ -324,15 +324,15 @@ MonoBehaviour:
       m_Calls: []
   m_text: "A. \uB4A4\uB97C \uB3CC\uC544\uBCF8\uB2E4"
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: 0edc57def033c59458891a5f6bd8dafe, type: 2}
-  m_sharedMaterial: {fileID: -4456664549355664398, guid: 0edc57def033c59458891a5f6bd8dafe, type: 2}
+  m_fontAsset: {fileID: 11400000, guid: f23b62b91beef1b4896a0a04c55f4f25, type: 2}
+  m_sharedMaterial: {fileID: -2279878296309729514, guid: f23b62b91beef1b4896a0a04c55f4f25, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
   m_fontColor32:
     serializedVersion: 2
-    rgba: 4278190080
-  m_fontColor: {r: 0, g: 0, b: 0, a: 1}
+    rgba: 4294967295
+  m_fontColor: {r: 1, g: 1, b: 1, a: 1}
   m_enableVertexGradient: 0
   m_colorMode: 3
   m_fontColorGradient:

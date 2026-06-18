@@ -17,6 +17,10 @@ public class SaveLoadWindow : MonoBehaviour
     [SerializeField] private Button saveModeButton;
     [SerializeField] private Button loadModeButton;
     [SerializeField] private Button closeButton;
+    [SerializeField] private Image saveModeImage;
+    [SerializeField] private Image loadModeImage;
+    [SerializeField] private Sprite tabNormalSprite;
+    [SerializeField] private Sprite tabSelectedSprite;
 
     private SaveLoadMode currentMode = SaveLoadMode.Load;
 
@@ -51,6 +55,7 @@ public class SaveLoadWindow : MonoBehaviour
     public void Open()
     {
         windowRoot.SetActive(true);
+        UpdateModeButtonSprites();
         RefreshSlots();
     }
 
@@ -188,5 +193,14 @@ public class SaveLoadWindow : MonoBehaviour
 
         closeButton.onClick.RemoveAllListeners();
         closeButton.onClick.AddListener(Close);
+
+        UpdateModeButtonSprites();
+    }
+
+    // 현재 저장/로드 모드에 맞게 탭 버튼 이미지를 고정한다.
+    private void UpdateModeButtonSprites()
+    {
+        saveModeImage.sprite = currentMode == SaveLoadMode.Save ? tabSelectedSprite : tabNormalSprite;
+        loadModeImage.sprite = currentMode == SaveLoadMode.Load ? tabSelectedSprite : tabNormalSprite;
     }
 }

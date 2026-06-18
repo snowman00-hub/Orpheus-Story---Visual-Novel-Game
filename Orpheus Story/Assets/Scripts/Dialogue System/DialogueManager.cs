@@ -20,7 +20,7 @@ public class DialogueManager : MonoBehaviour
     private bool isApplyingLine; // 연출 적용 중인지 여부를 나타내며, 이 동안 Confirm 입력은 무시된다.
     private GameInput gameInput;
 
-    public bool CanSave => currentLine != null && !waitingForChoice && !isApplyingLine;
+    public bool CanSave => currentLine != null && !isApplyingLine;
     public string CurrentLineId => currentLine == null ? string.Empty : currentLine.Id;
 
     // 시작 전에 모든 챕터 CSV를 읽어 대사 사전을 준비한다.
